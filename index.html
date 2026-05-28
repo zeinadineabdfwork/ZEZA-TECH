@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>ZEZA TECH — Software Inteligente</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --black:#080808;
+  --white:#F5F2EC;
+  --orange:#FF6200;
+  --orange-dim:#CC4E00;
+  --blue:#1A5CFF;
+  --gray:#1A1A1A;
+  --gray2:#2A2A2A;
+  --gray-light:#888;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--black);
+  color:var(--white);
+  font-family:'Space Mono',monospace;
+  overflow-x:hidden;
+  cursor:none;
+}
+/* CUSTOM CURSOR */
+#cursor{
+  width:12px;height:12px;
+  background:var(--orange);
+  border-radius:50%;
+  position:fixed;top:0;left:0;
+  pointer-events:none;
+  z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:width .15s,height .15s,background .15s;
+  mix-blend-mode:difference;
+}
+#cursor.big{width:40px;height:40px}
+
+/* DOODLE CANVAS */
+#doodle{
+  position:fixed;top:0;left:0;
+  width:100%;height:100%;
+  opacity:.04;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;
+  z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.2rem 4rem;
+  background:rgba(8,8,8,.8);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(255,98,0,.15);
+}
+.nav-logo{
+  display:flex;align-items:center;gap:.75rem;
+}
+.nav-logo-mark{
+  width:42px;height:42px;
+  background:var(--orange);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.1rem;letter-spacing:1px;
+  color:var(--black);
+  clip-path:polygon(8% 0%,92% 0%,100% 8%,100% 92%,92% 100%,8% 100%,0% 92%,0% 8%);
+}
+.nav-brand{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.3rem;letter-spacing:3px;
+  color:var(--white);
+}
+.nav-brand span{color:var(--orange)}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{
+  font-family:'Space Mono',monospace;
+  font-size:.7rem;letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--gray-light);
+  text-decoration:none;
+  transition:color .2s;
+}
+.nav-links a:hover{color:var(--orange)}
+.nav-cta{
+  font-family:'Space Mono',monospace;
+  font-size:.7rem;letter-spacing:2px;
+  text-transform:uppercase;
+  padding:.6rem 1.4rem;
+  border:1px solid var(--orange);
+  color:var(--orange);
+  background:transparent;
+  cursor:none;
+  text-decoration:none;
+  transition:all .2s;
+}
+.nav-cta:hover{background:var(--orange);color:var(--black)}
+
+/* HERO */
+#hero{
+  position:relative;
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  justify-content:center;
+  padding:8rem 4rem 4rem;
+  overflow:hidden;
+  z-index:1;
+}
+.hero-eyebrow{
+  font-size:.65rem;letter-spacing:5px;
+  text-transform:uppercase;
+  color:var(--orange);
+  margin-bottom:1.5rem;
+  display:flex;align-items:center;gap:.75rem;
+}
+.hero-eyebrow::before{
+  content:'';display:block;
+  width:40px;height:1px;
+  background:var(--orange);
+}
+.hero-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(4rem,10vw,10rem);
+  line-height:.92;
+  letter-spacing:-1px;
+  max-width:900px;
+}
+.hero-title .outline{
+  -webkit-text-stroke:1px var(--white);
+  color:transparent;
+}
+.hero-title .accent{color:var(--orange)}
+.hero-sub{
+  font-family:'Inter',sans-serif;
+  font-size:1.05rem;font-weight:300;
+  color:var(--gray-light);
+  max-width:480px;
+  line-height:1.8;
+  margin:2rem 0 3rem;
+}
+.hero-actions{display:flex;gap:1.2rem;align-items:center;flex-wrap:wrap}
+.btn-primary{
+  font-family:'Space Mono',monospace;
+  font-size:.75rem;letter-spacing:2px;
+  text-transform:uppercase;
+  padding:.9rem 2.2rem;
+  background:var(--orange);
+  color:var(--black);
+  border:none;cursor:none;
+  text-decoration:none;
+  font-weight:700;
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
+  transition:all .2s;
+}
+.btn-primary:hover{background:var(--white)}
+.btn-outline{
+  font-family:'Space Mono',monospace;
+  font-size:.75rem;letter-spacing:2px;
+  text-transform:uppercase;
+  padding:.9rem 2.2rem;
+  background:transparent;
+  color:var(--white);
+  border:1px solid rgba(255,255,255,.25);
+  cursor:none;
+  text-decoration:none;
+  transition:all .2s;
+}
+.btn-outline:hover{border-color:var(--white)}
+.hero-stats{
+  display:flex;gap:3rem;margin-top:5rem;
+  padding-top:3rem;
+  border-top:1px solid rgba(255,255,255,.08);
+}
+.hero-stat-num{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:2.8rem;
+  color:var(--orange);
+  line-height:1;
+}
+.hero-stat-label{
+  font-size:.65rem;letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--gray-light);
+  margin-top:.3rem;
+}
+.hero-scroll{
+  position:absolute;right:4rem;bottom:4rem;
+  display:flex;flex-direction:column;align-items:center;gap:.75rem;
+  font-size:.6rem;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gray-light);
+}
+.hero-scroll::after{
+  content:'';width:1px;height:60px;
+  background:linear-gradient(to bottom,var(--gray-light),transparent);
+  animation:scrollLine 1.5s ease-in-out infinite;
+}
+@keyframes scrollLine{
+  0%{height:0;opacity:0}50%{height:60px;opacity:1}100%{height:0;opacity:0}
+}
+/* MARQUEE */
+.marquee-wrap{
+  position:relative;z-index:1;
+  background:var(--orange);
+  padding:.7rem 0;
+  overflow:hidden;
+  display:flex;
+}
+.marquee-track{
+  display:flex;gap:0;
+  animation:marquee 20s linear infinite;
+  white-space:nowrap;
+}
+.marquee-item{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.1rem;letter-spacing:3px;
+  color:var(--black);
+  padding:0 2rem;
+  display:flex;align-items:center;gap:2rem;
+}
+.marquee-item::after{
+  content:'✦';font-size:.7rem;
+}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* SECTION HEADER */
+.section-header{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  margin-bottom:4rem;
+}
+.section-eyebrow{
+  font-size:.65rem;letter-spacing:4px;
+  text-transform:uppercase;
+  color:var(--orange);
+  margin-bottom:.75rem;
+}
+.section-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(2.5rem,5vw,4.5rem);
+  line-height:1;
+}
+.section-title .outline{
+  -webkit-text-stroke:1px var(--white);
+  color:transparent;
+}
+.section-link{
+  font-size:.65rem;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gray-light);
+  text-decoration:none;
+  border-bottom:1px solid var(--gray-light);
+  padding-bottom:2px;
+  transition:color .2s,border-color .2s;
+}
+.section-link:hover{color:var(--orange);border-color:var(--orange)}
+
+/* SERVICES */
+#services{
+  position:relative;z-index:1;
+  padding:8rem 4rem;
+}
+.services-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:1px;
+  border:1px solid rgba(255,255,255,.08);
+}
+.service-card{
+  padding:3rem 2.5rem;
+  background:var(--gray);
+  position:relative;
+  overflow:hidden;
+  transition:background .3s;
+  cursor:none;
+}
+.service-card::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;
+  height:2px;
+  background:var(--orange);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform .4s ease;
+}
+.service-card:hover::before{transform:scaleX(1)}
+.service-card:hover{background:var(--gray2)}
+.service-num{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:4rem;
+  color:rgba(255,98,0,.12);
+  line-height:1;
+  margin-bottom:1rem;
+}
+.service-icon{
+  width:48px;height:48px;
+  border:1px solid rgba(255,98,0,.4);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:1.5rem;
+}
+.service-icon svg{width:24px;height:24px;stroke:var(--orange);fill:none;stroke-width:1.5}
+.service-name{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.6rem;letter-spacing:1px;
+  margin-bottom:.75rem;
+}
+.service-desc{
+  font-family:'Inter',sans-serif;
+  font-size:.85rem;font-weight:300;
+  line-height:1.8;
+  color:var(--gray-light);
+}
+.service-tags{
+  display:flex;flex-wrap:wrap;gap:.5rem;
+  margin-top:1.5rem;
+}
+.service-tag{
+  font-size:.6rem;letter-spacing:2px;
+  text-transform:uppercase;
+  padding:.3rem .7rem;
+  border:1px solid rgba(255,98,0,.25);
+  color:var(--orange);
+}
+
+/* ABOUT */
+#about{
+  position:relative;z-index:1;
+  padding:8rem 4rem;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6rem;
+  align-items:center;
+}
+.about-visual{
+  position:relative;
+}
+.about-logo-box{
+  width:100%;
+  aspect-ratio:1;
+  background:var(--gray);
+  border:1px solid rgba(255,255,255,.07);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+  overflow:hidden;
+}
+.about-logo-box canvas{
+  width:100%;height:100%;
+  opacity:.12;
+  position:absolute;top:0;left:0;
+}
+.zeza-svg{
+  position:relative;z-index:1;
+  width:60%;
+}
+.about-badge{
+  position:absolute;
+  bottom:-1.5rem;right:-1.5rem;
+  width:120px;height:120px;
+  background:var(--orange);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:2rem;
+  color:var(--black);
+  line-height:1;
+}
+.about-badge small{font-size:.5rem;letter-spacing:3px;text-transform:uppercase}
+.about-text-eyebrow{font-size:.65rem;letter-spacing:4px;text-transform:uppercase;color:var(--orange);margin-bottom:1rem}
+.about-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(2rem,4vw,3.5rem);
+  line-height:1.1;
+  margin-bottom:1.5rem;
+}
+.about-body{
+  font-family:'Inter',sans-serif;
+  font-size:.9rem;font-weight:300;
+  line-height:2;
+  color:var(--gray-light);
+  margin-bottom:2.5rem;
+}
+.about-list{list-style:none;display:flex;flex-direction:column;gap:.75rem}
+.about-list li{
+  display:flex;align-items:center;gap:.75rem;
+  font-family:'Space Mono',monospace;
+  font-size:.72rem;letter-spacing:1px;
+  color:var(--gray-light);
+}
+.about-list li::before{
+  content:'';width:8px;height:8px;
+  background:var(--orange);
+  flex-shrink:0;
+  clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);
+}
+
+/* PORTFOLIO */
+#portfolio{
+  position:relative;z-index:1;
+  padding:8rem 4rem;
+}
+.portfolio-grid{
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  grid-template-rows:auto;
+  gap:1.2rem;
+}
+.pcard{
+  background:var(--gray);
+  border:1px solid rgba(255,255,255,.05);
+  overflow:hidden;
+  position:relative;
+  cursor:none;
+}
+.pcard:nth-child(1){grid-column:span 7;grid-row:span 2}
+.pcard:nth-child(2){grid-column:span 5}
+.pcard:nth-child(3){grid-column:span 5}
+.pcard:nth-child(4){grid-column:span 4}
+.pcard:nth-child(5){grid-column:span 4}
+.pcard:nth-child(6){grid-column:span 4}
+.pcard-visual{
+  width:100%;height:220px;
+  background:var(--gray2);
+  position:relative;
+  overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+.pcard:nth-child(1) .pcard-visual{height:300px}
+.pcard-pattern{
+  width:100%;height:100%;
+  opacity:.4;
+}
+.pcard-label{
+  position:absolute;top:.75rem;left:.75rem;
+  font-size:.55rem;letter-spacing:2px;text-transform:uppercase;
+  padding:.3rem .7rem;
+  background:var(--orange);
+  color:var(--black);
+  font-family:'Space Mono',monospace;
+}
+.pcard-body{padding:1.5rem}
+.pcard-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.4rem;letter-spacing:1px;
+  margin-bottom:.5rem;
+}
+.pcard-desc{
+  font-family:'Inter',sans-serif;
+  font-size:.8rem;font-weight:300;
+  color:var(--gray-light);
+  line-height:1.7;
+}
+.pcard-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:1rem;
+  padding-top:1rem;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+.pcard-tech{
+  font-size:.6rem;letter-spacing:1px;
+  color:rgba(255,98,0,.7);
+  font-family:'Space Mono',monospace;
+}
+.pcard-arrow{
+  width:28px;height:28px;
+  border:1px solid rgba(255,255,255,.15);
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;
+}
+.pcard:hover .pcard-arrow{
+  background:var(--orange);
+  border-color:var(--orange);
+}
+.pcard-arrow svg{width:12px;height:12px;stroke:var(--white);fill:none;stroke-width:2}
+.pcard:hover .pcard-arrow svg{stroke:var(--black)}
+
+/* PROCESS */
+#process{
+  position:relative;z-index:1;
+  padding:8rem 4rem;
+  background:var(--gray);
+  border-top:1px solid rgba(255,255,255,.06);
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.process-steps{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:0;
+  margin-top:4rem;
+  position:relative;
+}
+.process-steps::before{
+  content:'';
+  position:absolute;top:24px;left:0;right:0;height:1px;
+  background:linear-gradient(to right,transparent,var(--orange),transparent);
+  z-index:0;
+}
+.process-step{
+  padding:0 2rem 2rem;
+  position:relative;z-index:1;
+}
+.process-dot{
+  width:48px;height:48px;
+  background:var(--black);
+  border:2px solid var(--orange);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.2rem;
+  color:var(--orange);
+  margin-bottom:1.5rem;
+}
+.process-name{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.3rem;letter-spacing:1px;
+  margin-bottom:.5rem;
+}
+.process-desc{
+  font-family:'Inter',sans-serif;
+  font-size:.8rem;font-weight:300;
+  color:var(--gray-light);
+  line-height:1.7;
+}
+
+/* CONTACT */
+#contact{
+  position:relative;z-index:1;
+  padding:8rem 4rem;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6rem;
+}
+.contact-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(3rem,6vw,6rem);
+  line-height:.95;
+  margin-bottom:2rem;
+}
+.contact-title .outline{
+  -webkit-text-stroke:1px var(--white);
+  color:transparent;
+}
+.contact-info{margin-top:3rem;display:flex;flex-direction:column;gap:1.5rem}
+.contact-item{
+  display:flex;align-items:center;gap:1rem;
+  padding:1rem 1.5rem;
+  border:1px solid rgba(255,255,255,.07);
+  background:var(--gray);
+}
+.contact-item-icon{
+  width:36px;height:36px;flex-shrink:0;
+  background:rgba(255,98,0,.12);
+  border:1px solid rgba(255,98,0,.3);
+  display:flex;align-items:center;justify-content:center;
+}
+.contact-item-icon svg{width:16px;height:16px;stroke:var(--orange);fill:none;stroke-width:1.5}
+.contact-item-label{
+  font-size:.6rem;letter-spacing:2px;text-transform:uppercase;
+  color:var(--gray-light);margin-bottom:.2rem;
+}
+.contact-item-val{
+  font-family:'Space Mono',monospace;
+  font-size:.8rem;color:var(--white);
+}
+.form-group{margin-bottom:1.2rem}
+.form-label{
+  display:block;
+  font-size:.6rem;letter-spacing:2px;text-transform:uppercase;
+  color:var(--gray-light);margin-bottom:.5rem;
+}
+.form-input{
+  width:100%;padding:.9rem 1.2rem;
+  background:var(--gray);
+  border:1px solid rgba(255,255,255,.1);
+  color:var(--white);
+  font-family:'Space Mono',monospace;
+  font-size:.8rem;
+  outline:none;
+  transition:border-color .2s;
+  cursor:none;
+}
+.form-input:focus{border-color:var(--orange)}
+.form-input::placeholder{color:rgba(255,255,255,.25)}
+textarea.form-input{resize:vertical;min-height:120px}
+
+/* FOOTER */
+footer{
+  position:relative;z-index:1;
+  background:var(--gray);
+  padding:3rem 4rem;
+  display:flex;align-items:center;justify-content:space-between;
+  border-top:1px solid rgba(255,98,0,.2);
+  flex-wrap:wrap;gap:1.5rem;
+}
+.footer-brand{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.8rem;letter-spacing:3px;
+}
+.footer-brand span{color:var(--orange)}
+.footer-copy{
+  font-size:.65rem;letter-spacing:1px;
+  color:var(--gray-light);
+}
+.footer-socials{display:flex;gap:1rem}
+.footer-social{
+  width:36px;height:36px;
+  border:1px solid rgba(255,255,255,.12);
+  display:flex;align-items:center;justify-content:center;
+  text-decoration:none;
+  transition:all .2s;cursor:none;
+}
+.footer-social:hover{border-color:var(--orange);background:var(--orange)}
+.footer-social svg{width:14px;height:14px;stroke:var(--white);fill:none;stroke-width:1.5}
+.footer-social:hover svg{stroke:var(--black)}
+
+/* REVEAL ANIMATIONS */
+.reveal{
+  opacity:0;
+  transform:translateY(40px);
+  transition:opacity .8s ease,transform .8s ease;
+}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.1s}
+.reveal-delay-2{transition-delay:.2s}
+.reveal-delay-3{transition-delay:.3s}
+.reveal-delay-4{transition-delay:.4s}
+.reveal-delay-5{transition-delay:.5s}
+.reveal-delay-6{transition-delay:.6s}
+
+@media(max-width:900px){
+  nav{padding:1rem 1.5rem}
+  .nav-links{display:none}
+  #hero{padding:7rem 1.5rem 3rem}
+  #services,#about,#portfolio,#process,#contact{padding:5rem 1.5rem}
+  #about,#contact{grid-template-columns:1fr;gap:3rem}
+  .portfolio-grid{display:flex;flex-direction:column}
+  .pcard:nth-child(1) .pcard-visual{height:200px}
+  footer{padding:2rem 1.5rem;flex-direction:column;text-align:center}
+  .hero-stats{flex-wrap:wrap;gap:1.5rem}
+  .process-steps::before{display:none}
+  .hero-scroll{display:none}
+}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<canvas id="doodle"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-mark">ZT</div>
+    <span class="nav-brand">ZEZA <span>TECH</span></span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#services">Serviços</a></li>
+    <li><a href="#about">Sobre</a></li>
+    <li><a href="#portfolio">Portfólio</a></li>
+    <li><a href="#process">Processo</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Contacte-nos</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-eyebrow reveal">Inovação · Tecnologia · Futuro</div>
+  <h1 class="hero-title reveal reveal-delay-1">
+    SOFTWARE<br>
+    <span class="outline">INTELIGENTE</span><br>
+    PARA<br>
+    <span class="accent">NEGÓCIO</span><br>
+    <span class="outline">INTELIGENTE</span>
+  </h1>
+  <p class="hero-sub reveal reveal-delay-2">
+    Acelere o crescimento da sua empresa com aplicações poderosas, escaláveis e construídas para durar.
+  </p>
+  <div class="hero-actions reveal reveal-delay-3">
+    <a href="#portfolio" class="btn-primary">Ver Portfólio</a>
+    <a href="#contact" class="btn-outline">Falar Connosco</a>
+  </div>
+  <div class="hero-stats reveal reveal-delay-4">
+    <div>
+      <div class="hero-stat-num">50+</div>
+      <div class="hero-stat-label">Projectos Entregues</div>
+    </div>
+    <div>
+      <div class="hero-stat-num">30+</div>
+      <div class="hero-stat-label">Clientes Satisfeitos</div>
+    </div>
+    <div>
+      <div class="hero-stat-num">5+</div>
+      <div class="hero-stat-label">Anos de Experiência</div>
+    </div>
+    <div>
+      <div class="hero-stat-num">100%</div>
+      <div class="hero-stat-label">Dedicação Total</div>
+    </div>
+  </div>
+  <div class="hero-scroll">Scroll</div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap" aria-hidden="true">
+  <div class="marquee-track" id="marquee-track">
+    <span class="marquee-item">Desenvolvimento Web</span>
+    <span class="marquee-item">Desenvolvimento Mobile</span>
+    <span class="marquee-item">Software Empresarial</span>
+    <span class="marquee-item">Design UI/UX</span>
+    <span class="marquee-item">Integração de APIs</span>
+    <span class="marquee-item">Soluções Escaláveis</span>
+    <span class="marquee-item">Desenvolvimento Web</span>
+    <span class="marquee-item">Desenvolvimento Mobile</span>
+    <span class="marquee-item">Software Empresarial</span>
+    <span class="marquee-item">Design UI/UX</span>
+    <span class="marquee-item">Integração de APIs</span>
+    <span class="marquee-item">Soluções Escaláveis</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-eyebrow">O que fazemos</div>
+      <h2 class="section-title">NOSSOS<br><span class="outline">SERVIÇOS</span></h2>
+    </div>
+    <a href="#contact" class="section-link">Solicitar Orçamento →</a>
+  </div>
+  <div class="services-grid">
+    <!-- Card 1 -->
+    <div class="service-card reveal reveal-delay-1">
+      <div class="service-num">01</div>
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      </div>
+      <div class="service-name">Desenvolvimento Web &amp; Mobile</div>
+      <p class="service-desc">Criamos aplicações web e mobile modernas, rápidas e responsivas que transformam a experiência do utilizador e impulsionam o negócio.</p>
+      <div class="service-tags">
+        <span class="service-tag">React</span>
+        <span class="service-tag">Flutter</span>
+        <span class="service-tag">Node.js</span>
+        <span class="service-tag">PWA</span>
+      </div>
+    </div>
+    <!-- Card 2 -->
+    <div class="service-card reveal reveal-delay-2">
+      <div class="service-num">02</div>
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+      </div>
+      <div class="service-name">Soluções de Software Empresarial</div>
+      <p class="service-desc">Desenvolvemos sistemas ERP, CRM e plataformas customizadas que optimizam os processos internos da sua empresa com eficiência e escala.</p>
+      <div class="service-tags">
+        <span class="service-tag">ERP</span>
+        <span class="service-tag">CRM</span>
+        <span class="service-tag">SaaS</span>
+        <span class="service-tag">B2B</span>
+      </div>
+    </div>
+    <!-- Card 3 -->
+    <div class="service-card reveal reveal-delay-3">
+      <div class="service-num">03</div>
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M8 6l4-4 4 4M16 18l-4 4-4-4M6 8l-4 4 4 4M18 8l4 4-4 4"/><circle cx="12" cy="12" r="2"/></svg>
+      </div>
+      <div class="service-name">Integração e Desenvolvimento de API</div>
+      <p class="service-desc">Conectamos sistemas, plataformas e serviços através de APIs robustas e seguras, garantindo fluxo de dados contínuo e eficiente.</p>
+      <div class="service-tags">
+        <span class="service-tag">REST</span>
+        <span class="service-tag">GraphQL</span>
+        <span class="service-tag">Webhooks</span>
+        <span class="service-tag">OAuth</span>
+      </div>
+    </div>
+    <!-- Card 4 -->
+    <div class="service-card reveal reveal-delay-4">
+      <div class="service-num">04</div>
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      </div>
+      <div class="service-name">Serviços de Design UI/UX</div>
+      <p class="service-desc">Criamos interfaces intuitivas e visualmente impactantes que cativam os utilizadores e elevam a percepção da sua marca no mercado digital.</p>
+      <div class="service-tags">
+        <span class="service-tag">Figma</span>
+        <span class="service-tag">Prototipagem</span>
+        <span class="service-tag">Research</span>
+        <span class="service-tag">Branding</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-visual reveal">
+    <div class="about-logo-box">
+      <canvas id="about-canvas" width="600" height="600"></canvas>
+      <!-- ZEZA LOGO SVG -->
+      <svg class="zeza-svg" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+        <!-- ZE top -->
+        <rect x="20" y="20" width="110" height="35" fill="white"/>
+        <rect x="20" y="70" width="110" height="35" fill="white"/>
+        <rect x="20" y="120" width="110" height="35" fill="white"/>
+        <!-- Z diagonal -->
+        <polygon points="20,20 130,20 20,155" fill="none"/>
+        <path d="M20 20 L130 20 L20 155 L130 155" stroke="white" stroke-width="12" fill="none"/>
+        <!-- ZA bottom -->
+        <rect x="160" y="20" width="110" height="35" fill="white"/>
+        <rect x="160" y="70" width="110" height="35" fill="white"/>
+        <!-- A shape -->
+        <polygon points="215,120 160,270 270,270" fill="white"/>
+        <polygon points="215,185 185,270 245,270" fill="#080808"/>
+        <!-- person silhouette inside A -->
+        <circle cx="215" cy="195" r="12" fill="#080808"/>
+        <rect x="207" y="207" width="16" height="25" rx="4" fill="#080808"/>
+        <!-- lightbulb -->
+        <circle cx="215" cy="157" r="10" fill="none" stroke="#FF6200" stroke-width="2"/>
+        <line x1="215" y1="135" x2="215" y2="130" stroke="#FF6200" stroke-width="1.5"/>
+        <line x1="228" y1="140" x2="232" y2="136" stroke="#FF6200" stroke-width="1.5"/>
+        <line x1="202" y1="140" x2="198" y2="136" stroke="#FF6200" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <div class="about-badge">
+      <span>5+</span>
+      <small>Anos</small>
+    </div>
+  </div>
+  <div>
+    <div class="about-text-eyebrow reveal">Quem somos</div>
+    <h2 class="about-title reveal reveal-delay-1">
+      TECNOLOGIA<br>QUE TRANSFORMA<br>NEGÓCIOS
+    </h2>
+    <p class="about-body reveal reveal-delay-2">
+      A ZEZA TECH é uma empresa moçambicana de desenvolvimento de software focada em criar soluções digitais que realmente fazem a diferença. Combinamos expertise técnica com visão estratégica para entregar produtos que superam expectativas.
+    </p>
+    <ul class="about-list reveal reveal-delay-3">
+      <li>Equipa técnica altamente qualificada e experiente</li>
+      <li>Metodologias ágeis para entrega rápida e eficiente</li>
+      <li>Suporte contínuo e manutenção pós-lançamento</li>
+      <li>Soluções personalizadas para cada cliente</li>
+      <li>Tecnologias modernas e escaláveis</li>
+    </ul>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-eyebrow">Nosso trabalho</div>
+      <h2 class="section-title">PORTFÓLIO<br><span class="outline">SELECCIONADO</span></h2>
+    </div>
+    <a href="#contact" class="section-link">Ver Todos →</a>
+  </div>
+  <div class="portfolio-grid">
+    <!-- Project 1 - large -->
+    <div class="pcard reveal">
+      <div class="pcard-visual">
+        <canvas class="pcard-pattern" id="p1"></canvas>
+        <span class="pcard-label">Web App</span>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-title">Plataforma de Gestão Empresarial</div>
+        <p class="pcard-desc">Sistema ERP completo para empresa de logística com módulos de inventário, finanças, RH e relatórios em tempo real.</p>
+        <div class="pcard-footer">
+          <span class="pcard-tech">React · Node.js · PostgreSQL</span>
+          <div class="pcard-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+      </div>
+    </div>
+    <!-- Project 2 -->
+    <div class="pcard reveal reveal-delay-1">
+      <div class="pcard-visual">
+        <canvas class="pcard-pattern" id="p2"></canvas>
+        <span class="pcard-label">Mobile</span>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-title">App de Pagamentos Móveis</div>
+        <p class="pcard-desc">Aplicação mobile para transferências e pagamentos com integração M-Pesa.</p>
+        <div class="pcard-footer">
+          <span class="pcard-tech">Flutter · Firebase</span>
+          <div class="pcard-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+      </div>
+    </div>
+    <!-- Project 3 -->
+    <div class="pcard reveal reveal-delay-2">
+      <div class="pcard-visual">
+        <canvas class="pcard-pattern" id="p3"></canvas>
+        <span class="pcard-label">API</span>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-title">Gateway de Integração Multi-Sistema</div>
+        <p class="pcard-desc">API central conectando 8 sistemas legados para empresa de telecomunicações.</p>
+        <div class="pcard-footer">
+          <span class="pcard-tech">Node.js · REST · OAuth</span>
+          <div class="pcard-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+      </div>
+    </div>
+    <!-- Project 4 -->
+    <div class="pcard reveal reveal-delay-1">
+      <div class="pcard-visual">
+        <canvas class="pcard-pattern" id="p4"></canvas>
+        <span class="pcard-label">UI/UX</span>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-title">Redesign Plataforma E-commerce</div>
+        <p class="pcard-desc">Redesign completo aumentou conversão em 40%.</p>
+        <div class="pcard-footer">
+          <span class="pcard-tech">Figma · React</span>
+          <div class="pcard-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+      </div>
+    </div>
+    <!-- Project 5 -->
+    <div class="pcard reveal reveal-delay-2">
+      <div class="pcard-visual">
+        <canvas class="pcard-pattern" id="p5"></canvas>
+        <span class="pcard-label">Web</span>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-title">Portal de Serviços Municipais</div>
+        <p class="pcard-desc">Plataforma digital para cidadãos acederem a serviços públicos online.</p>
+        <div class="pcard-footer">
+          <span class="pcard-tech">Next.js · TypeScript</span>
+          <div class="pcard-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+      </div>
+    </div>
+    <!-- Project 6 -->
+    <div class="pcard reveal reveal-delay-3">
+      <div class="pcard-visual">
+        <canvas class="pcard-pattern" id="p6"></canvas>
+        <span class="pcard-label">Software</span>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-title">Sistema de Gestão Hospitalar</div>
+        <p class="pcard-desc">Plataforma integrada para clínica com agendamentos e histórico de pacientes.</p>
+        <div class="pcard-footer">
+          <span class="pcard-tech">Vue.js · Laravel · MySQL</span>
+          <div class="pcard-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-eyebrow">Como trabalhamos</div>
+      <h2 class="section-title">NOSSO<br><span class="outline">PROCESSO</span></h2>
+    </div>
+  </div>
+  <div class="process-steps">
+    <div class="process-step reveal reveal-delay-1">
+      <div class="process-dot">01</div>
+      <div class="process-name">Descoberta</div>
+      <p class="process-desc">Analisamos profundamente os seus objectivos, desafios e contexto para desenhar a solução ideal.</p>
+    </div>
+    <div class="process-step reveal reveal-delay-2">
+      <div class="process-dot">02</div>
+      <div class="process-name">Planeamento</div>
+      <p class="process-desc">Definimos arquitectura, tecnologias, roadmap e milestones com total transparência.</p>
+    </div>
+    <div class="process-step reveal reveal-delay-3">
+      <div class="process-dot">03</div>
+      <div class="process-name">Design</div>
+      <p class="process-desc">Criamos protótipos e interfaces validadas com foco na experiência real do utilizador.</p>
+    </div>
+    <div class="process-step reveal reveal-delay-4">
+      <div class="process-dot">04</div>
+      <div class="process-name">Desenvolvimento</div>
+      <p class="process-desc">Construímos em sprints ágeis com entregas incrementais e feedback contínuo.</p>
+    </div>
+    <div class="process-step reveal reveal-delay-5">
+      <div class="process-dot">05</div>
+      <div class="process-name">Lançamento</div>
+      <p class="process-desc">Fazemos deploy seguro, testamos exaustivamente e lançamos com total confiança.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div>
+    <div class="about-text-eyebrow reveal">Vamos trabalhar juntos</div>
+    <h2 class="contact-title reveal reveal-delay-1">
+      FALE<br><span class="outline">CONNOSCO</span><br>HOJE
+    </h2>
+    <p class="about-body reveal reveal-delay-2" style="margin-bottom:0">
+      Tem um projecto em mente? Estamos prontos para transformar a sua visão em realidade digital.
+    </p>
+    <div class="contact-info reveal reveal-delay-3">
+      <div class="contact-item">
+        <div class="contact-item-icon">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.7A2 2 0 012 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92z" transform="translate(1,1)"/></svg>
+        </div>
+        <div>
+          <div class="contact-item-label">Telefone</div>
+          <div class="contact-item-val">868 532 678</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div>
+          <div class="contact-item-label">Email</div>
+          <div class="contact-item-val">info@zezatech.co.mz</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+        </div>
+        <div>
+          <div class="contact-item-label">Website</div>
+          <div class="contact-item-val">www.zezatech.co.mz</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 2H3v16h5v4l4-4h5l4-4V2zM11 11V7m4 4V7"/></svg>
+        </div>
+        <div>
+          <div class="contact-item-label">Social Media</div>
+          <div class="contact-item-val">@zezatech</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="reveal reveal-delay-2">
+    <div class="form-group">
+      <label class="form-label">Nome Completo</label>
+      <input type="text" class="form-input" placeholder="O seu nome"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input type="email" class="form-input" placeholder="email@empresa.com"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Empresa</label>
+      <input type="text" class="form-input" placeholder="Nome da empresa"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Serviço de Interesse</label>
+      <select class="form-input" style="cursor:none">
+        <option value="" style="background:#1a1a1a">Seleccione um serviço</option>
+        <option style="background:#1a1a1a">Desenvolvimento Web & Mobile</option>
+        <option style="background:#1a1a1a">Software Empresarial</option>
+        <option style="background:#1a1a1a">Integração de APIs</option>
+        <option style="background:#1a1a1a">Design UI/UX</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Mensagem</label>
+      <textarea class="form-input" placeholder="Descreva o seu projecto..."></textarea>
+    </div>
+    <button class="btn-primary" style="width:100%;justify-content:center;display:block;text-align:center" onclick="this.textContent='Mensagem Enviada ✓';this.style.background='#fff'">
+      Enviar Mensagem
+    </button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">ZEZA <span>TECH</span></div>
+  <div class="footer-copy">© 2025 ZEZA TECH. Todos os direitos reservados. · Maputo, Moçambique</div>
+  <div class="footer-socials">
+    <a href="#" class="footer-social" aria-label="Instagram">
+      <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+    </a>
+    <a href="#" class="footer-social" aria-label="LinkedIn">
+      <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+    </a>
+    <a href="#" class="footer-social" aria-label="Twitter/X">
+      <svg viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>
+    </a>
+  </div>
+</footer>
+
+<script>
+/* ---- CUSTOM CURSOR ---- */
+const cursor=document.getElementById('cursor');
+document.addEventListener('mousemove',e=>{
+  cursor.style.left=e.clientX+'px';
+  cursor.style.top=e.clientY+'px';
+});
+document.querySelectorAll('a,button,.service-card,.pcard').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cursor.classList.add('big'));
+  el.addEventListener('mouseleave',()=>cursor.classList.remove('big'));
+});
+
+/* ---- DOODLE BACKGROUND ---- */
+(function(){
+  const c=document.getElementById('doodle');
+  const ctx=c.getContext('2d');
+  function resize(){c.width=window.innerWidth;c.height=document.body.scrollHeight||window.innerHeight*3;}
+  resize();
+  window.addEventListener('resize',()=>{resize();drawDoodle();});
+  function drawDoodle(){
+    ctx.clearRect(0,0,c.width,c.height);
+    ctx.strokeStyle='#ffffff';
+    ctx.lineWidth=2.5;
+    ctx.lineCap='round';
+    ctx.lineJoin='round';
+    const rng=(seed)=>{let s=seed;return()=>{s=(s*9301+49297)%233280;return s/233280;};};
+    const r=rng(42);
+    const shapes=Math.floor((c.width*c.height)/3000);
+    for(let i=0;i<shapes;i++){
+      const x=r()*c.width;
+      const y=r()*c.height;
+      const type=Math.floor(r()*8);
+      ctx.beginPath();
+      if(type===0){
+        /* zigzag */
+        ctx.moveTo(x,y);
+        for(let j=0;j<4;j++){ctx.lineTo(x+(j+1)*20*(r()>.5?1:-1),y+(j%2===0?20:-20));}
+      }else if(type===1){
+        /* spiral */
+        let a=0;ctx.moveTo(x,y);
+        for(let j=0;j<60;j++){a+=0.2;ctx.lineTo(x+Math.cos(a)*a*2,y+Math.sin(a)*a*2);}
+      }else if(type===2){
+        /* triangle */
+        const s=20+r()*40;
+        ctx.moveTo(x,y-s);ctx.lineTo(x+s,y+s);ctx.lineTo(x-s,y+s);ctx.closePath();
+      }else if(type===3){
+        /* arc */
+        ctx.arc(x,y,10+r()*30,0,Math.PI*(1+r()));
+      }else if(type===4){
+        /* cross */
+        const s=15+r()*25;
+        ctx.moveTo(x-s,y);ctx.lineTo(x+s,y);ctx.moveTo(x,y-s);ctx.lineTo(x,y+s);
+      }else if(type===5){
+        /* wavy */
+        ctx.moveTo(x,y);
+        for(let j=0;j<6;j++){ctx.quadraticCurveTo(x+j*15,y-25,x+(j+1)*15,y);}
+      }else if(type===6){
+        /* diamond */
+        const s=15+r()*30;
+        ctx.moveTo(x,y-s);ctx.lineTo(x+s,y);ctx.lineTo(x,y+s);ctx.lineTo(x-s,y);ctx.closePath();
+      }else{
+        /* random blob */
+        ctx.moveTo(x,y);
+        for(let j=0;j<5;j++){ctx.quadraticCurveTo(x+r()*60-30,y+r()*60-30,x+r()*40-20,y+r()*40-20);}
+      }
+      ctx.stroke();
+    }
+  }
+  drawDoodle();
+})();
+
+/* ---- PORTFOLIO CARD PATTERNS ---- */
+const colors=[['#FF6200','#1A5CFF'],['#1A5CFF','#FF6200'],['#FF6200','#ffffff'],['#ffffff','#FF6200'],['#1A5CFF','#ffffff'],['#FF6200','#1A5CFF']];
+['p1','p2','p3','p4','p5','p6'].forEach((id,i)=>{
+  const c=document.getElementById(id);
+  if(!c)return;
+  c.width=c.offsetWidth||600;c.height=c.offsetHeight||300;
+  const ctx=c.getContext('2d');
+  const[c1,c2]=colors[i];
+  ctx.fillStyle='#111';ctx.fillRect(0,0,c.width,c.height);
+  ctx.strokeStyle=c1;ctx.lineWidth=1.5;ctx.globalAlpha=.5;
+  for(let x=0;x<c.width;x+=30){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(0,x);ctx.stroke();}
+  for(let x=0;x<c.width+c.height;x+=30){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(c.width,x-c.width);ctx.stroke();}
+  ctx.strokeStyle=c2;ctx.globalAlpha=.3;
+  for(let j=0;j<5;j++){
+    const cx=Math.random()*c.width,cy=Math.random()*c.height;
+    ctx.beginPath();ctx.arc(cx,cy,20+Math.random()*60,0,Math.PI*2);ctx.stroke();
+  }
+});
+
+/* ---- ABOUT CANVAS ---- */
+(function(){
+  const c=document.getElementById('about-canvas');
+  const ctx=c.getContext('2d');
+  ctx.strokeStyle='#ffffff';ctx.lineWidth=1.5;
+  const shapes=120;
+  for(let i=0;i<shapes;i++){
+    const x=Math.random()*600,y=Math.random()*600;
+    const t=Math.floor(Math.random()*4);
+    ctx.beginPath();
+    if(t===0){ctx.arc(x,y,5+Math.random()*25,0,Math.PI*(1+Math.random()));}
+    else if(t===1){const s=10+Math.random()*30;ctx.moveTo(x,y-s);ctx.lineTo(x+s,y+s);ctx.lineTo(x-s,y+s);ctx.closePath();}
+    else if(t===2){const s=15;ctx.moveTo(x-s,y);ctx.lineTo(x+s,y);ctx.moveTo(x,y-s);ctx.lineTo(x,y+s);}
+    else{ctx.moveTo(x,y);for(let j=0;j<3;j++){ctx.quadraticCurveTo(x+Math.random()*50-25,y+Math.random()*50-25,x+Math.random()*40-20,y+Math.random()*40-20);}}
+    ctx.stroke();
+  }
+})();
+
+/* ---- SCROLL REVEAL ---- */
+const revealEls=document.querySelectorAll('.reveal');
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');}});
+},{threshold:.1,rootMargin:'0px 0px -50px 0px'});
+revealEls.forEach(el=>observer.observe(el));
+
+/* ---- PARALLAX DOODLE ---- */
+let lastScroll=0;
+window.addEventListener('scroll',()=>{
+  const s=window.scrollY;
+  document.getElementById('doodle').style.transform=`translateY(${s*.15}px)`;
+  lastScroll=s;
+},{passive:true});
+
+/* ---- NAV ACTIVE ---- */
+window.addEventListener('scroll',()=>{
+  const nav=document.querySelector('nav');
+  nav.style.borderBottomColor=window.scrollY>50?'rgba(255,98,0,.3)':'rgba(255,98,0,.15)';
+},{passive:true});
+</script>
+</body>
+</html>
