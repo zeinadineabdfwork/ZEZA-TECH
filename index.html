@@ -20,7 +20,6 @@
     --transition-theme: background 0.45s ease, color 0.45s ease, border-color 0.45s ease;
   }
 
-  /* LIGHT MODE OVERRIDES */
   body.light-mode {
     --black: #f0ede8;
     --white: #111111;
@@ -80,8 +79,10 @@
   body.light-mode .about-logo-bg { background: var(--gray); }
   body.light-mode .project-num { background: rgba(240,237,232,0.6); color: rgba(17,17,17,0.5); }
   body.light-mode .services-header p { color: rgba(17,17,17,0.45); }
+  body.light-mode .mobile-menu { background: rgba(240,237,232,0.97); }
+  body.light-mode .mobile-menu a { color: rgba(17,17,17,0.8); border-bottom-color: rgba(0,0,0,0.07); }
+  body.light-mode .menu-btn span { background: var(--white); }
 
-  /* THEME TOGGLE BUTTON */
   #theme-toggle {
     position: fixed;
     bottom: 2rem;
@@ -100,36 +101,15 @@
     transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), box-shadow 0.3s;
     overflow: hidden;
   }
-  #theme-toggle:hover {
-    transform: scale(1.12) rotate(15deg);
-    box-shadow: 0 6px 32px rgba(255,98,0,0.55);
-  }
+  #theme-toggle:hover { transform: scale(1.12) rotate(15deg); box-shadow: 0 6px 32px rgba(255,98,0,0.55); }
   #theme-toggle:active { transform: scale(0.95); }
-  .toggle-icon {
-    position: absolute;
-    width: 26px; height: 26px;
-    transition: opacity 0.35s, transform 0.35s cubic-bezier(.34,1.56,.64,1);
-  }
+  .toggle-icon { position: absolute; width: 26px; height: 26px; transition: opacity 0.35s, transform 0.35s cubic-bezier(.34,1.56,.64,1); }
   .icon-moon { opacity: 1; transform: rotate(0deg) scale(1); }
   .icon-sun  { opacity: 0; transform: rotate(90deg) scale(0.5); }
   body.light-mode .icon-moon { opacity: 0; transform: rotate(-90deg) scale(0.5); }
   body.light-mode .icon-sun  { opacity: 1; transform: rotate(0deg) scale(1); }
-  #theme-toggle .toggle-label {
-    position: absolute;
-    bottom: -28px;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
-    color: var(--orange);
-    white-space: nowrap;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.2s, bottom 0.2s;
-  }
-  #theme-toggle:hover .toggle-label { opacity: 1; bottom: -22px; }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   html { scroll-behavior: smooth; }
 
   body {
@@ -140,16 +120,16 @@
     cursor: none;
   }
 
-  /* CUSTOM CURSOR */
+  .cursor, .cursor-ring { pointer-events: none; }
+  @media (hover: none) { .cursor, .cursor-ring { display: none; } }
   .cursor {
     width: 12px; height: 12px;
     background: var(--orange);
     border-radius: 50%;
     position: fixed;
     top: 0; left: 0;
-    pointer-events: none;
     z-index: 9999;
-    transition: transform 0.15s ease, width 0.2s, height 0.2s, background 0.2s;
+    transition: transform 0.15s ease, width 0.2s, height 0.2s;
     transform: translate(-50%, -50%);
   }
   .cursor-ring {
@@ -158,18 +138,15 @@
     border-radius: 50%;
     position: fixed;
     top: 0; left: 0;
-    pointer-events: none;
     z-index: 9998;
     transition: transform 0.35s cubic-bezier(.17,.67,.83,.67);
     transform: translate(-50%, -50%);
   }
 
-  /* SCROLLBAR */
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: var(--black); }
   ::-webkit-scrollbar-thumb { background: var(--orange); border-radius: 2px; }
 
-  /* NAV */
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -194,9 +171,19 @@
     text-decoration: none;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.6rem;
+    z-index: 101;
+  }
+  .nav-logo-img {
+    width: 38px;
+    height: 38px;
+    object-fit: cover;
+    border-radius: 4px;
+    background: var(--orange);
+    display: block;
   }
   .nav-logo span { color: var(--orange); }
+
   .nav-links { display: flex; gap: 2.5rem; list-style: none; }
   .nav-links a {
     color: rgba(245,243,239,0.7);
@@ -219,7 +206,7 @@
   .nav-links a:hover { color: var(--white); }
   .nav-links a:hover::after { width: 100%; }
   .nav-cta {
-    background: var(--orange);
+    background: var(--orange) !important;
     color: var(--black) !important;
     padding: 0.6rem 1.6rem;
     border-radius: 2px;
@@ -230,7 +217,75 @@
   .nav-cta:hover { background: #ff7a20 !important; transform: translateY(-1px); }
   .nav-cta::after { display: none !important; }
 
-  /* HERO */
+  .menu-btn {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    z-index: 101;
+    position: relative;
+  }
+  .menu-btn span {
+    display: block;
+    width: 26px; height: 2px;
+    background: var(--white);
+    border-radius: 2px;
+    transition: transform 0.35s cubic-bezier(.77,0,.18,1), opacity 0.25s;
+    transform-origin: center;
+  }
+  .menu-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .menu-btn.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .menu-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(7,7,7,0.97);
+    backdrop-filter: blur(20px);
+    z-index: 99;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+  .mobile-menu.open {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .mobile-menu a {
+    color: rgba(245,243,239,0.85);
+    text-decoration: none;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 8vw, 3rem);
+    letter-spacing: 0.1em;
+    padding: 0.9rem 2rem;
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    transition: color 0.2s, background 0.2s;
+  }
+  .mobile-menu a:first-child { border-top: 1px solid rgba(255,255,255,0.06); }
+  .mobile-menu a:hover { color: var(--orange); background: rgba(255,98,0,0.05); }
+  .mobile-menu .mobile-cta {
+    color: var(--black) !important;
+    background: var(--orange);
+    margin-top: 1.5rem;
+    border-radius: 2px;
+    border: none;
+    width: auto;
+    padding: 0.9rem 3rem;
+    font-size: clamp(1.2rem, 4vw, 1.6rem);
+  }
+  .mobile-menu .mobile-cta:hover { background: #ff7a20; }
+
   #hero {
     position: relative;
     min-height: 100vh;
@@ -239,23 +294,12 @@
     justify-content: center;
     overflow: hidden;
   }
-  #wave-canvas {
-    position: absolute;
-    inset: 0;
-    width: 100%; height: 100%;
-    opacity: 0.25;
-  }
+  #wave-canvas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.25; }
   .hero-overlay {
-    position: absolute;
-    inset: 0;
+    position: absolute; inset: 0;
     background: linear-gradient(135deg, rgba(7,7,7,0.75) 0%, rgba(7,7,7,0.4) 50%, rgba(0,51,204,0.15) 100%);
   }
-  .hero-content {
-    position: relative;
-    z-index: 2;
-    padding: 0 4rem;
-    max-width: 900px;
-  }
+  .hero-content { position: relative; z-index: 2; padding: 0 4rem; max-width: 900px; }
   .hero-eyebrow {
     font-family: 'Space Mono', monospace;
     font-size: 0.78rem;
@@ -269,15 +313,10 @@
     opacity: 0;
     animation: fadeUp 0.8s 0.2s forwards;
   }
-  .hero-eyebrow::before {
-    content: '';
-    display: block;
-    width: 40px; height: 1px;
-    background: var(--orange);
-  }
+  .hero-eyebrow::before { content: ''; display: block; width: 40px; height: 1px; background: var(--orange); }
   .hero-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(4.5rem, 10vw, 9.5rem);
+    font-size: clamp(4rem, 10vw, 9.5rem);
     line-height: 0.92;
     letter-spacing: 0.01em;
     color: var(--white);
@@ -286,13 +325,10 @@
     animation: fadeUp 0.9s 0.35s forwards;
   }
   .hero-title .accent { color: var(--orange); }
-  .hero-title .stroke {
-    -webkit-text-stroke: 1.5px var(--white);
-    color: transparent;
-  }
+  .hero-title .stroke { -webkit-text-stroke: 1.5px var(--white); color: transparent; }
   .hero-sub {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(1.8rem, 4vw, 3.5rem);
+    font-size: clamp(1.5rem, 4vw, 3.5rem);
     color: rgba(245,243,239,0.45);
     letter-spacing: 0.05em;
     margin-bottom: 2.5rem;
@@ -313,6 +349,7 @@
     display: flex;
     gap: 1.2rem;
     align-items: center;
+    flex-wrap: wrap;
     opacity: 0;
     animation: fadeUp 0.9s 0.8s forwards;
   }
@@ -329,6 +366,7 @@
     text-decoration: none;
     transition: transform 0.2s, background 0.2s;
     display: inline-block;
+    cursor: pointer;
   }
   .btn-primary:hover { background: #ff7a20; transform: translateY(-2px); }
   .btn-ghost {
@@ -370,7 +408,6 @@
     0%, 100% { opacity: 0.4; transform: scaleY(1); }
     50% { opacity: 1; transform: scaleY(0.6); }
   }
-
   .hero-badge {
     position: absolute;
     bottom: 3rem; right: 4rem;
@@ -384,14 +421,7 @@
     animation: fadeUp 1s 1.4s forwards;
   }
 
-  /* TICKER */
-  .ticker-wrap {
-    background: var(--orange);
-    overflow: hidden;
-    padding: 0.75rem 0;
-    position: relative;
-    z-index: 3;
-  }
+  .ticker-wrap { background: var(--orange); overflow: hidden; padding: 0.75rem 0; position: relative; z-index: 3; }
   .ticker {
     display: flex;
     gap: 0;
@@ -406,15 +436,10 @@
     color: var(--black);
     padding: 0 2.5rem;
   }
-  .ticker-dot {
-    color: rgba(7,7,7,0.35) !important;
-    padding: 0 0.5rem !important;
-  }
+  .ticker-dot { color: rgba(7,7,7,0.35) !important; padding: 0 0.5rem !important; }
   @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-  /* SECTIONS */
   section { padding: 7rem 4rem; }
-
   .section-label {
     font-family: 'Space Mono', monospace;
     font-size: 0.72rem;
@@ -426,14 +451,14 @@
     align-items: center;
     gap: 0.8rem;
   }
-  .section-label::before {
-    content: '';
-    display: block;
-    width: 30px; height: 1px;
-    background: var(--orange);
+  .section-label::before { content: ''; display: block; width: 30px; height: 1px; background: var(--orange); }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 5.5rem);
+    line-height: 1;
+    letter-spacing: 0.02em;
   }
 
-  /* SERVICES */
   #services { background: var(--black); }
   .services-header {
     display: flex;
@@ -441,12 +466,6 @@
     align-items: flex-end;
     margin-bottom: 4rem;
     gap: 2rem;
-  }
-  .section-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(3rem, 6vw, 5.5rem);
-    line-height: 1;
-    letter-spacing: 0.02em;
   }
   .services-grid {
     display: grid;
@@ -464,42 +483,19 @@
   }
   .service-card::before {
     content: '';
-    position: absolute;
-    inset: 0;
+    position: absolute; inset: 0;
     background: linear-gradient(135deg, rgba(255,98,0,0.06) 0%, transparent 60%);
     opacity: 0;
     transition: opacity 0.4s;
   }
   .service-card:hover { background: var(--gray); }
   .service-card:hover::before { opacity: 1; }
-  .service-num {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--orange);
-    letter-spacing: 0.2em;
-    margin-bottom: 2rem;
-  }
-  .service-icon {
-    width: 52px; height: 52px;
-    margin-bottom: 1.5rem;
-    position: relative;
-  }
+  .service-num { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--orange); letter-spacing: 0.2em; margin-bottom: 2rem; }
+  .service-icon { width: 52px; height: 52px; margin-bottom: 1.5rem; }
   .service-icon svg { width: 100%; height: 100%; }
-  .service-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
-    letter-spacing: 0.04em;
-    margin-bottom: 1rem;
-    color: var(--white);
-    transition: color 0.3s;
-  }
+  .service-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 0.04em; margin-bottom: 1rem; color: var(--white); transition: color 0.3s; }
   .service-card:hover .service-title { color: var(--orange); }
-  .service-desc {
-    font-size: 0.9rem;
-    color: rgba(245,243,239,0.55);
-    line-height: 1.7;
-    font-weight: 300;
-  }
+  .service-desc { font-size: 0.9rem; color: rgba(245,243,239,0.55); line-height: 1.7; font-weight: 300; }
   .service-arrow {
     position: absolute;
     bottom: 2.5rem; right: 2.5rem;
@@ -513,20 +509,10 @@
     transform: translateX(-8px);
     transition: opacity 0.3s, transform 0.3s, border-color 0.3s, background 0.3s;
   }
-  .service-card:hover .service-arrow {
-    opacity: 1;
-    transform: translateX(0);
-    border-color: var(--orange);
-    background: var(--orange);
-  }
+  .service-card:hover .service-arrow { opacity: 1; transform: translateX(0); border-color: var(--orange); background: var(--orange); }
   .service-arrow svg { width: 16px; height: 16px; }
 
-  /* STATS */
-  #stats {
-    background: var(--white);
-    color: var(--black);
-    padding: 5rem 4rem;
-  }
+  #stats { background: var(--white); color: var(--black); padding: 5rem 4rem; }
   .stats-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -540,41 +526,21 @@
     overflow: hidden;
   }
   .stat-item:last-child { border-right: none; }
-  .stat-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 4.5rem;
-    line-height: 1;
-    letter-spacing: 0.01em;
-    color: var(--black);
-    margin-bottom: 0.4rem;
-  }
+  .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 5vw, 4.5rem); line-height: 1; letter-spacing: 0.01em; color: var(--black); margin-bottom: 0.4rem; }
   .stat-num span { color: var(--orange); }
-  .stat-label {
-    font-size: 0.82rem;
-    color: rgba(7,7,7,0.5);
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
+  .stat-label { font-size: 0.82rem; color: rgba(7,7,7,0.5); font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
 
-  /* PORTFOLIO */
+  /* ===================== PORTFOLIO — CORRIGIDO ===================== */
   #portfolio { background: var(--gray); position: relative; overflow: hidden; }
-  #portfolio-wave-bg {
-    position: absolute;
-    inset: 0;
-    opacity: 0.07;
-    pointer-events: none;
-  }
   .portfolio-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
     margin-bottom: 4rem;
+    gap: 1.5rem;
+    flex-wrap: wrap;
   }
-  .portfolio-filter {
-    display: flex;
-    gap: 0.5rem;
-  }
+  .portfolio-filter { display: flex; gap: 0.5rem; flex-wrap: wrap; }
   .filter-btn {
     background: transparent;
     border: 1px solid rgba(255,255,255,0.15);
@@ -589,11 +555,7 @@
     cursor: pointer;
     transition: all 0.2s;
   }
-  .filter-btn.active, .filter-btn:hover {
-    background: var(--orange);
-    border-color: var(--orange);
-    color: var(--black);
-  }
+  .filter-btn.active, .filter-btn:hover { background: var(--orange); border-color: var(--orange); color: var(--black); }
   .portfolio-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -604,52 +566,61 @@
     position: relative;
     overflow: hidden;
     aspect-ratio: 4/3;
-    background: var(--gray-mid);
+    /* fundo fallback enquanto imagem carrega */
+    background-color: var(--gray-mid);
     cursor: pointer;
   }
-  .portfolio-item.featured {
-    grid-column: span 2;
-    aspect-ratio: 16/9;
+  .portfolio-item.featured { grid-column: span 2; aspect-ratio: 16/9; }
+
+  /* ===== IMAGEM DE FUNDO — cobre 100% sem cortar conteúdo ===== */
+  .portfolio-item[data-bg] {
+    /* A imagem é definida via JS para facilitar manutenção */
   }
-  .project-visual {
-    width: 100%; height: 100%;
+  /* Classe aplicada via JS para imagens com background */
+  .portfolio-item .proj-bg-img {
     position: absolute;
     inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;        /* cobre tudo, sem distorção */
+    object-position: center;  /* centra a imagem */
+    display: block;
+    transition: transform 0.6s cubic-bezier(.16,1,.3,1);
+    /* garante que a imagem está sempre visível ao 100% */
+    opacity: 1;
+  }
+  .portfolio-item:hover .proj-bg-img { transform: scale(1.04); }
+
+  /* Canvas para projectos sem imagem real */
+  .project-visual {
+    width: 100%; height: 100%;
+    position: absolute; inset: 0;
     transition: transform 0.6s cubic-bezier(.16,1,.3,1);
   }
   .portfolio-item:hover .project-visual { transform: scale(1.04); }
+
   .project-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(7,7,7,0.95) 0%, rgba(7,7,7,0.2) 60%, transparent 100%);
+    position: absolute; inset: 0;
+    /* gradiente mais forte para garantir leitura do texto sobre qualquer imagem */
+    background: linear-gradient(to top,
+      rgba(7,7,7,0.97) 0%,
+      rgba(7,7,7,0.6) 40%,
+      rgba(7,7,7,0.15) 70%,
+      transparent 100%);
     opacity: 0;
     transition: opacity 0.4s;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     padding: 2rem;
+    z-index: 2;
   }
   .portfolio-item:hover .project-overlay { opacity: 1; }
-  .project-tag {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    color: var(--orange);
-    text-transform: uppercase;
-    margin-bottom: 0.4rem;
-  }
-  .project-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem;
-    letter-spacing: 0.04em;
-    color: var(--white);
-    margin-bottom: 0.5rem;
-  }
-  .project-desc {
-    font-size: 0.8rem;
-    color: rgba(245,243,239,0.6);
-    font-weight: 300;
-  }
+  .portfolio-item.touch-active .project-overlay { opacity: 1; }
+
+  .project-tag { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; color: var(--orange); text-transform: uppercase; margin-bottom: 0.4rem; }
+  .project-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.04em; color: var(--white); margin-bottom: 0.5rem; }
+  .project-desc { font-size: 0.8rem; color: rgba(245,243,239,0.6); font-weight: 300; }
   .project-link {
     display: inline-flex;
     align-items: center;
@@ -660,6 +631,7 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
     font-weight: 600;
+    text-decoration: none;
   }
   .project-num {
     position: absolute;
@@ -667,34 +639,20 @@
     font-family: 'Space Mono', monospace;
     font-size: 0.65rem;
     letter-spacing: 0.15em;
-    color: rgba(245,243,239,0.35);
-    background: rgba(7,7,7,0.5);
+    color: rgba(245,243,239,0.8);
+    background: rgba(7,7,7,0.6);
     padding: 0.3rem 0.6rem;
     border-radius: 1px;
+    z-index: 3;
+    backdrop-filter: blur(4px);
   }
 
-  /* ABOUT / MANIFESTO */
-  #about {
-    background: var(--black);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6rem;
-    align-items: center;
-  }
-  .about-visual {
-    position: relative;
-    aspect-ratio: 1;
-  }
-  .about-logo-display {
-    width: 100%; height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-  }
+  #about { background: var(--black); display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
+  .about-visual { position: relative; aspect-ratio: 1; }
+  .about-logo-display { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; }
   .about-logo-bg {
     width: 320px; height: 320px;
-    background: var(--gray);
+    background: #000;
     border-radius: 3px;
     display: flex;
     align-items: center;
@@ -704,153 +662,45 @@
   }
   .about-logo-bg::before {
     content: '';
-    position: absolute;
-    inset: -50%;
+    position: absolute; inset: -50%;
     background: conic-gradient(from 0deg, transparent 0%, rgba(255,98,0,0.08) 25%, transparent 50%, rgba(0,51,204,0.08) 75%, transparent 100%);
     animation: logoSpin 20s linear infinite;
   }
   @keyframes logoSpin { to { transform: rotate(360deg); } }
-  .zeza-logo-svg { position: relative; z-index: 1; width: 200px; }
-  .about-deco {
-    position: absolute;
-    top: -20px; right: -20px;
-    width: 100px; height: 100px;
-    border: 1px solid rgba(255,98,0,0.2);
-    border-radius: 3px;
-  }
-  .about-deco2 {
-    position: absolute;
-    bottom: -20px; left: -20px;
-    width: 60px; height: 60px;
-    background: var(--orange);
-    border-radius: 2px;
-    opacity: 0.15;
-  }
-  .about-content {}
-  .about-quote {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(2.2rem, 4vw, 3.5rem);
-    line-height: 1.05;
-    letter-spacing: 0.02em;
-    margin-bottom: 2rem;
-  }
-  .about-quote em {
-    font-style: normal;
-    color: var(--orange);
-  }
-  .about-text {
-    font-size: 1rem;
-    color: rgba(245,243,239,0.55);
-    line-height: 1.8;
-    font-weight: 300;
-    margin-bottom: 2.5rem;
-  }
-  .about-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-    margin-bottom: 2.5rem;
-  }
-  .tag {
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    font-weight: 600;
-    padding: 0.45rem 1rem;
-    border-radius: 1px;
-  }
-  .tag-outline {
-    border: 1px solid rgba(255,255,255,0.15);
-    color: rgba(245,243,239,0.6);
-  }
-  .tag-filled {
-    background: var(--orange);
-    color: var(--black);
-  }
-  .tag-blue {
-    background: rgba(0,51,204,0.2);
-    border: 1px solid rgba(26,92,255,0.3);
-    color: var(--blue-light);
-  }
-
-  /* PROCESS */
-  #process {
-    background: var(--white);
-    color: var(--black);
-  }
-  .process-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0;
-    margin-top: 4rem;
-    border-top: 1px solid rgba(7,7,7,0.1);
-  }
-  .process-step {
-    padding: 2.5rem 2rem;
-    border-right: 1px solid rgba(7,7,7,0.1);
-    position: relative;
-  }
-  .process-step:last-child { border-right: none; }
-  .step-num {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    color: var(--orange);
-    margin-bottom: 1.5rem;
-  }
-  .step-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem;
-    letter-spacing: 0.04em;
-    color: var(--black);
-    margin-bottom: 0.8rem;
-  }
-  .step-desc {
-    font-size: 0.85rem;
-    color: rgba(7,7,7,0.5);
-    line-height: 1.7;
-    font-weight: 400;
-  }
-
-  /* CONTACT */
-  #contact {
-    background: var(--black);
-    position: relative;
-    overflow: hidden;
-  }
-  #contact-canvas {
-    position: absolute;
-    inset: 0;
-    opacity: 0.12;
-    pointer-events: none;
-  }
-  .contact-inner {
+  .about-logo-img {
     position: relative;
     z-index: 1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6rem;
-    align-items: start;
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 4px;
+    background: var(--orange);
   }
-  .contact-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(3rem, 6vw, 5.5rem);
-    line-height: 0.95;
-    letter-spacing: 0.02em;
-    margin-bottom: 1.5rem;
-  }
-  .contact-title em {
-    font-style: normal;
-    -webkit-text-stroke: 1.5px var(--white);
-    color: transparent;
-  }
-  .contact-sub {
-    font-size: 1rem;
-    color: rgba(245,243,239,0.5);
-    font-weight: 300;
-    line-height: 1.7;
-    margin-bottom: 3rem;
-  }
+  .about-deco { position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; border: 1px solid rgba(255,98,0,0.2); border-radius: 3px; }
+  .about-deco2 { position: absolute; bottom: -20px; left: -20px; width: 60px; height: 60px; background: var(--orange); border-radius: 2px; opacity: 0.15; }
+  .about-quote { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 4vw, 3.5rem); line-height: 1.05; letter-spacing: 0.02em; margin-bottom: 2rem; }
+  .about-quote em { font-style: normal; color: var(--orange); }
+  .about-text { font-size: 1rem; color: rgba(245,243,239,0.55); line-height: 1.8; font-weight: 300; margin-bottom: 2.5rem; }
+  .about-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 2.5rem; }
+  .tag { font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; padding: 0.45rem 1rem; border-radius: 1px; }
+  .tag-outline { border: 1px solid rgba(255,255,255,0.15); color: rgba(245,243,239,0.6); }
+  .tag-filled { background: var(--orange); color: var(--black); }
+  .tag-blue { background: rgba(0,51,204,0.2); border: 1px solid rgba(26,92,255,0.3); color: var(--blue-light); }
+
+  #process { background: var(--white); color: var(--black); }
+  .process-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: 4rem; border-top: 1px solid rgba(7,7,7,0.1); }
+  .process-step { padding: 2.5rem 2rem; border-right: 1px solid rgba(7,7,7,0.1); position: relative; }
+  .process-step:last-child { border-right: none; }
+  .step-num { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; color: var(--orange); margin-bottom: 1.5rem; }
+  .step-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.04em; color: var(--black); margin-bottom: 0.8rem; }
+  .step-desc { font-size: 0.85rem; color: rgba(7,7,7,0.5); line-height: 1.7; font-weight: 400; }
+
+  #contact { background: var(--black); position: relative; overflow: hidden; }
+  #contact-canvas { position: absolute; inset: 0; opacity: 0.12; pointer-events: none; }
+  .contact-inner { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; }
+  .contact-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 6vw, 5.5rem); line-height: 0.95; letter-spacing: 0.02em; margin-bottom: 1.5rem; }
+  .contact-title em { font-style: normal; -webkit-text-stroke: 1.5px var(--white); color: transparent; }
+  .contact-sub { font-size: 1rem; color: rgba(245,243,239,0.5); font-weight: 300; line-height: 1.7; margin-bottom: 3rem; }
   .contact-info { display: flex; flex-direction: column; gap: 1.5rem; }
   .contact-item {
     display: flex;
@@ -861,43 +711,16 @@
     border: 1px solid rgba(255,255,255,0.06);
     border-radius: 2px;
     transition: background 0.2s, border-color 0.2s;
+    text-decoration: none;
   }
-  .contact-item:hover {
-    background: rgba(255,98,0,0.06);
-    border-color: rgba(255,98,0,0.2);
-  }
-  .contact-icon {
-    width: 42px; height: 42px;
-    background: rgba(255,98,0,0.12);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
+  .contact-item:hover { background: rgba(255,98,0,0.06); border-color: rgba(255,98,0,0.2); }
+  .contact-icon { width: 42px; height: 42px; background: rgba(255,98,0,0.12); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .contact-icon svg { width: 20px; height: 20px; }
-  .contact-label {
-    font-size: 0.72rem;
-    letter-spacing: 0.15em;
-    color: rgba(245,243,239,0.35);
-    text-transform: uppercase;
-    font-family: 'Space Mono', monospace;
-    margin-bottom: 0.2rem;
-  }
-  .contact-value {
-    font-size: 0.95rem;
-    color: var(--white);
-    font-weight: 500;
-  }
+  .contact-label { font-size: 0.72rem; letter-spacing: 0.15em; color: rgba(245,243,239,0.35); text-transform: uppercase; font-family: 'Space Mono', monospace; margin-bottom: 0.2rem; }
+  .contact-value { font-size: 0.95rem; color: var(--white); font-weight: 500; }
   .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
   .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
-  .form-label {
-    font-size: 0.72rem;
-    letter-spacing: 0.15em;
-    color: rgba(245,243,239,0.4);
-    text-transform: uppercase;
-    font-family: 'Space Mono', monospace;
-  }
+  .form-label { font-size: 0.72rem; letter-spacing: 0.15em; color: rgba(245,243,239,0.4); text-transform: uppercase; font-family: 'Space Mono', monospace; }
   .form-input, .form-textarea {
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(255,255,255,0.1);
@@ -908,15 +731,12 @@
     color: var(--white);
     outline: none;
     transition: border-color 0.2s, background 0.2s;
+    width: 100%;
   }
-  .form-input:focus, .form-textarea:focus {
-    border-color: var(--orange);
-    background: rgba(255,98,0,0.04);
-  }
+  .form-input:focus, .form-textarea:focus { border-color: var(--orange); background: rgba(255,98,0,0.04); }
   .form-textarea { resize: vertical; min-height: 120px; }
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
 
-  /* FOOTER */
   footer {
     background: var(--gray);
     border-top: 1px solid rgba(255,255,255,0.06);
@@ -925,87 +745,39 @@
     justify-content: space-between;
     align-items: center;
     gap: 2rem;
+    flex-wrap: wrap;
   }
-  .footer-logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem;
-    letter-spacing: 0.08em;
-    color: var(--white);
-  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.08em; color: var(--white); display: flex; align-items: center; gap: 0.5rem; }
   .footer-logo span { color: var(--orange); }
-  .footer-copy {
-    font-size: 0.78rem;
-    color: rgba(245,243,239,0.3);
-    font-family: 'Space Mono', monospace;
-    letter-spacing: 0.08em;
-  }
-  .footer-social {
-    display: flex;
-    gap: 0.8rem;
-  }
-  .social-link {
-    width: 36px; height: 36px;
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    transition: border-color 0.2s, background 0.2s;
-  }
-  .social-link:hover {
-    border-color: var(--orange);
-    background: rgba(255,98,0,0.1);
-  }
+  .footer-logo-img { width: 28px; height: 28px; object-fit: cover; border-radius: 3px; background: var(--orange); }
+  .footer-copy { font-size: 0.78rem; color: rgba(245,243,239,0.3); font-family: 'Space Mono', monospace; letter-spacing: 0.08em; text-align: center; }
+  .footer-social { display: flex; gap: 0.8rem; }
+  .social-link { width: 36px; height: 36px; border: 1px solid rgba(255,255,255,0.12); border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: border-color 0.2s, background 0.2s; }
+  .social-link:hover { border-color: var(--orange); background: rgba(255,98,0,0.1); }
   .social-link svg { width: 16px; height: 16px; fill: rgba(245,243,239,0.6); }
   .social-link:hover svg { fill: var(--orange); }
 
-  /* ANIMATIONS */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .reveal {
-    opacity: 0;
-    transform: translateY(32px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
   .reveal-delay-1 { transition-delay: 0.15s; }
   .reveal-delay-2 { transition-delay: 0.3s; }
   .reveal-delay-3 { transition-delay: 0.45s; }
   .reveal-delay-4 { transition-delay: 0.6s; }
 
-  /* MOBILE NAV */
-  .menu-btn { display: none; }
-
+  /* ===================== RESPONSIVE ===================== */
   @media (max-width: 1024px) {
     nav { padding: 1.2rem 2rem; }
     nav.scrolled { padding: 0.9rem 2rem; }
     .nav-links { display: none; }
-    .menu-btn {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-    }
-    .menu-btn span {
-      display: block;
-      width: 24px; height: 1.5px;
-      background: var(--white);
-      transition: transform 0.3s;
-    }
+    .menu-btn { display: flex; }
     section { padding: 5rem 2rem; }
-    #about { grid-template-columns: 1fr; gap: 3rem; }
+    #about { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 2rem; }
     .about-visual { display: none; }
+    .services-header { flex-direction: column; align-items: flex-start; }
     .services-grid { grid-template-columns: 1fr; }
-    .portfolio-grid { grid-template-columns: 1fr 1fr; }
+    /* Portfólio em tablet: 2 colunas */
+    .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
     .portfolio-item.featured { grid-column: span 2; }
     .stats-grid { grid-template-columns: 1fr 1fr; }
     .stat-item:nth-child(2) { border-right: none; }
@@ -1019,24 +791,67 @@
     footer { flex-direction: column; text-align: center; padding: 2rem; }
     .hero-content { padding: 0 2rem; }
     .hero-scroll { left: 2rem; }
-    .hero-badge { right: 2rem; }
-    .services-header { flex-direction: column; align-items: flex-start; }
+    .hero-badge { right: 2rem; display: none; }
     .portfolio-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
     .form-row { grid-template-columns: 1fr; }
+    #stats { padding: 5rem 2rem; }
   }
+
   @media (max-width: 640px) {
-    .portfolio-grid { grid-template-columns: 1fr; }
-    .portfolio-item.featured { grid-column: span 1; aspect-ratio: 4/3; }
+    nav { padding: 1rem 1.2rem; }
+    nav.scrolled { padding: 0.8rem 1.2rem; }
+    section { padding: 4rem 1.2rem; }
+    #stats { padding: 4rem 1.2rem; }
+    .hero-content { padding: 0 1.2rem; }
+    .hero-scroll { left: 1.2rem; }
+    .hero-desc { font-size: 0.95rem; }
+    .hero-actions { flex-direction: column; align-items: flex-start; }
+    .btn-primary, .btn-ghost { width: 100%; text-align: center; }
+
+    /* Portfólio em mobile: 1 coluna, imagens grandes e bonitas */
+    .portfolio-grid {
+      grid-template-columns: 1fr;
+      background: none;
+      gap: 3px;
+    }
+    .portfolio-item {
+      aspect-ratio: 16/9; /* proporção cinematográfica em mobile */
+    }
+    .portfolio-item.featured {
+      grid-column: span 1;
+      aspect-ratio: 16/9;
+    }
+    /* Overlay sempre visível em mobile para melhor UX */
+    .portfolio-item .project-overlay {
+      opacity: 1;
+      background: linear-gradient(to top,
+        rgba(7,7,7,0.92) 0%,
+        rgba(7,7,7,0.45) 50%,
+        transparent 100%);
+    }
+
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .process-grid { grid-template-columns: 1fr; }
+    .process-step { border-right: none !important; border-top: 1px solid rgba(7,7,7,0.1) !important; }
+    .process-step:first-child { border-top: none !important; }
+    .contact-inner { gap: 2.5rem; }
+    footer { padding: 2rem 1.2rem; }
+    .services-grid { grid-template-columns: 1fr; }
+    .service-card { padding: 2rem 1.5rem; }
+  }
+
+  @media (max-width: 400px) {
+    .stat-item { padding: 1.5rem 1rem; }
+    .stat-num { font-size: 2.5rem; }
+    .portfolio-item { aspect-ratio: 4/3; }
   }
 </style>
 </head>
 <body>
 
-<!-- CURSOR -->
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursor-ring"></div>
 
-<!-- THEME TOGGLE -->
 <button id="theme-toggle" aria-label="Alternar modo claro/escuro">
   <svg class="toggle-icon icon-moon" viewBox="0 0 26 26" fill="none">
     <path d="M21 14.5A9 9 0 1 1 11.5 5a7 7 0 0 0 9.5 9.5z" fill="#070707" stroke="#070707" stroke-width="0.5"/>
@@ -1045,12 +860,21 @@
     <circle cx="13" cy="13" r="4.5" fill="#070707"/>
     <path d="M13 2v2M13 22v2M2 13h2M22 13h2M4.93 4.93l1.41 1.41M19.66 19.66l1.41 1.41M4.93 21.07l1.41-1.41M19.66 6.34l1.41-1.41" stroke="#070707" stroke-width="2" stroke-linecap="round"/>
   </svg>
-  <span class="toggle-label" id="toggle-label">MODO CLARO</span>
 </button>
 
-<!-- NAV -->
+<div class="mobile-menu" id="mobile-menu" role="dialog" aria-label="Menu de navegação">
+  <a href="#services" class="mobile-nav-link">Serviços</a>
+  <a href="#portfolio" class="mobile-nav-link">Portfólio</a>
+  <a href="#about" class="mobile-nav-link">Sobre</a>
+  <a href="#process" class="mobile-nav-link">Processo</a>
+  <a href="#contact" class="mobile-nav-link mobile-cta">Contactar</a>
+</div>
+
 <nav id="navbar">
-  <a href="#" class="nav-logo">ZEZA <span>TECH</span></a>
+  <a href="#" class="nav-logo">
+    <img src="./4.png" alt="ZEZA TECH Logo" class="nav-logo-img" onerror="this.style.display='none'">
+    ZEZA <span>TECH</span>
+  </a>
   <ul class="nav-links">
     <li><a href="#services">Serviços</a></li>
     <li><a href="#portfolio">Portfólio</a></li>
@@ -1058,12 +882,11 @@
     <li><a href="#process">Processo</a></li>
     <li><a href="#contact" class="nav-cta">Contactar</a></li>
   </ul>
-  <button class="menu-btn" aria-label="Menu">
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-menu">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
-<!-- HERO -->
 <section id="hero">
   <canvas id="wave-canvas"></canvas>
   <div class="hero-overlay"></div>
@@ -1089,7 +912,6 @@
   </div>
 </section>
 
-<!-- TICKER -->
 <div class="ticker-wrap">
   <div class="ticker" id="ticker">
     <span>ZEZA TECH</span><span class="ticker-dot">✦</span>
@@ -1107,7 +929,6 @@
   </div>
 </div>
 
-<!-- SERVICES -->
 <section id="services">
   <div class="services-header">
     <div>
@@ -1119,86 +940,45 @@
     </p>
   </div>
   <div class="services-grid">
-    <!-- Service 1 -->
     <div class="service-card reveal">
       <div class="service-num">01</div>
       <div class="service-icon">
-        <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="2" y="8" width="48" height="32" rx="3" stroke="#FF6200" stroke-width="2"/>
-          <path d="M16 40v6M36 40v6M10 46h32" stroke="#FF6200" stroke-width="2" stroke-linecap="round"/>
-          <path d="M8 20h4M8 26h4M8 32h4" stroke="rgba(255,98,0,0.4)" stroke-width="1.5" stroke-linecap="round"/>
-          <rect x="16" y="14" width="20" height="14" rx="1" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
-          <rect x="8" y="8" width="36" height="3" rx="1" fill="rgba(255,98,0,0.2)"/>
-        </svg>
+        <svg viewBox="0 0 52 52" fill="none"><rect x="2" y="8" width="48" height="32" rx="3" stroke="#FF6200" stroke-width="2"/><path d="M16 40v6M36 40v6M10 46h32" stroke="#FF6200" stroke-width="2" stroke-linecap="round"/><path d="M8 20h4M8 26h4M8 32h4" stroke="rgba(255,98,0,0.4)" stroke-width="1.5" stroke-linecap="round"/><rect x="16" y="14" width="20" height="14" rx="1" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/><rect x="8" y="8" width="36" height="3" rx="1" fill="rgba(255,98,0,0.2)"/></svg>
       </div>
       <h3 class="service-title">Desenvolvimento Web & Mobile</h3>
       <p class="service-desc">Criamos aplicações web e móveis de alta performance com tecnologias modernas. Desde MVP a sistemas complexos, entregamos com qualidade.</p>
-      <div class="service-arrow">
-        <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#070707" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
+      <div class="service-arrow"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#070707" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     </div>
-    <!-- Service 2 -->
     <div class="service-card reveal reveal-delay-1">
       <div class="service-num">02</div>
       <div class="service-icon">
-        <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="6" y="6" width="16" height="16" rx="2" stroke="#FF6200" stroke-width="2"/>
-          <rect x="6" y="30" width="16" height="16" rx="2" stroke="rgba(255,98,0,0.4)" stroke-width="2"/>
-          <rect x="30" y="6" width="16" height="16" rx="2" stroke="rgba(255,98,0,0.4)" stroke-width="2"/>
-          <rect x="30" y="30" width="16" height="16" rx="2" stroke="#FF6200" stroke-width="2"/>
-          <path d="M22 14h8M14 22v8M38 22v8M22 38h8" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
-          <circle cx="26" cy="26" r="4" fill="rgba(255,98,0,0.15)" stroke="#FF6200" stroke-width="1.5"/>
-        </svg>
+        <svg viewBox="0 0 52 52" fill="none"><rect x="6" y="6" width="16" height="16" rx="2" stroke="#FF6200" stroke-width="2"/><rect x="6" y="30" width="16" height="16" rx="2" stroke="rgba(255,98,0,0.4)" stroke-width="2"/><rect x="30" y="6" width="16" height="16" rx="2" stroke="rgba(255,98,0,0.4)" stroke-width="2"/><rect x="30" y="30" width="16" height="16" rx="2" stroke="#FF6200" stroke-width="2"/><path d="M22 14h8M14 22v8M38 22v8M22 38h8" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/><circle cx="26" cy="26" r="4" fill="rgba(255,98,0,0.15)" stroke="#FF6200" stroke-width="1.5"/></svg>
       </div>
       <h3 class="service-title">Soluções de Software Empresarial</h3>
       <p class="service-desc">Sistemas de gestão, ERP, CRM e plataformas personalizadas que optimizam os processos internos e aumentam a produtividade da sua empresa.</p>
-      <div class="service-arrow">
-        <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#070707" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
+      <div class="service-arrow"><svg viewBox="0 0 16 16" fill="none"><path d="M M3 8h10M9 4l4 4-4 4" stroke="#070707" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     </div>
-    <!-- Service 3 -->
     <div class="service-card reveal reveal-delay-2">
       <div class="service-num">03</div>
       <div class="service-icon">
-        <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="14" cy="26" r="8" stroke="#FF6200" stroke-width="2"/>
-          <circle cx="38" cy="26" r="8" stroke="#FF6200" stroke-width="2"/>
-          <path d="M22 26h8" stroke="#FF6200" stroke-width="2"/>
-          <path d="M26 20v-8M26 40v-6" stroke="rgba(255,98,0,0.4)" stroke-width="1.5" stroke-linecap="round"/>
-          <circle cx="26" cy="12" r="3" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
-          <circle cx="26" cy="40" r="3" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
-          <path d="M10 22l4 4-4 4" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-linecap="round"/>
-          <path d="M42 22l-4 4 4 4" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
+        <svg viewBox="0 0 52 52" fill="none"><circle cx="14" cy="26" r="8" stroke="#FF6200" stroke-width="2"/><circle cx="38" cy="26" r="8" stroke="#FF6200" stroke-width="2"/><path d="M22 26h8" stroke="#FF6200" stroke-width="2"/><path d="M26 20v-8M26 40v-6" stroke="rgba(255,98,0,0.4)" stroke-width="1.5" stroke-linecap="round"/><circle cx="26" cy="12" r="3" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/><circle cx="26" cy="40" r="3" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/></svg>
       </div>
       <h3 class="service-title">Integração e Desenvolvimento de API</h3>
       <p class="service-desc">Conectamos sistemas, serviços e plataformas através de APIs robustas e seguras. REST, GraphQL, e integrações com serviços de terceiros.</p>
-      <div class="service-arrow">
-        <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#070707" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
+      <div class="service-arrow"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#070707" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     </div>
-    <!-- Service 4 -->
     <div class="service-card reveal reveal-delay-3">
       <div class="service-num">04</div>
       <div class="service-icon">
-        <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="8" y="8" width="36" height="28" rx="3" stroke="#FF6200" stroke-width="2"/>
-          <path d="M16 36v8M36 36v8M10 44h32" stroke="rgba(255,98,0,0.4)" stroke-width="1.5" stroke-linecap="round"/>
-          <rect x="14" y="14" width="24" height="16" rx="1.5" fill="rgba(255,98,0,0.06)" stroke="rgba(255,98,0,0.3)" stroke-width="1"/>
-          <circle cx="26" cy="22" r="4" fill="rgba(255,98,0,0.15)" stroke="#FF6200" stroke-width="1.5"/>
-          <path d="M20 30c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
+        <svg viewBox="0 0 52 52" fill="none"><rect x="8" y="8" width="36" height="28" rx="3" stroke="#FF6200" stroke-width="2"/><path d="M16 36v8M36 36v8M10 44h32" stroke="rgba(255,98,0,0.4)" stroke-width="1.5" stroke-linecap="round"/><rect x="14" y="14" width="24" height="16" rx="1.5" fill="rgba(255,98,0,0.06)" stroke="rgba(255,98,0,0.3)" stroke-width="1"/><circle cx="26" cy="22" r="4" fill="rgba(255,98,0,0.15)" stroke="#FF6200" stroke-width="1.5"/></svg>
       </div>
       <h3 class="service-title">Serviços de Design UI/UX</h3>
       <p class="service-desc">Design centrado no utilizador com interfaces intuitivas e experiências digitais memoráveis. Protótipos, sistemas de design e muito mais.</p>
-      <div class="service-arrow">
-        <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#070707" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
+      <div class="service-arrow"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#070707" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     </div>
   </div>
 </section>
 
-<!-- STATS -->
 <section id="stats">
   <div class="section-label reveal" style="color:var(--orange);">Números que falam</div>
   <div class="stats-grid" style="margin-top:3rem;">
@@ -1221,106 +1001,93 @@
   </div>
 </section>
 
-<!-- PORTFOLIO -->
+<!-- x   — imagens via <img> com object-fit: cover -->
 <section id="portfolio">
-  <canvas id="portfolio-wave-bg"></canvas>
   <div class="portfolio-header">
     <div>
       <div class="section-label reveal">Trabalhos Recentes</div>
       <h2 class="section-title reveal reveal-delay-1">NOSSO<br>PORTFÓLIO</h2>
     </div>
     <div class="portfolio-filter reveal reveal-delay-2">
-      <button class="filter-btn active" data-filter="all">Todos</button>
-      <button class="filter-btn" data-filter="web">Web</button>
+      <button class="filter-btn active" data-filter="web">Web</button>
       <button class="filter-btn" data-filter="mobile">Mobile</button>
       <button class="filter-btn" data-filter="design">Design</button>
+      <a href="portfolio.html" class="filter-btn">Todos</a>
+
     </div>
   </div>
   <div class="portfolio-grid" id="portfolio-grid">
+
+    <!-- Projecto 1 — sem imagem real, usa canvas -->
     <div class="portfolio-item featured reveal" data-cat="web">
-      <canvas class="project-visual" id="proj1"></canvas>
+     <img src="./img/5.png" alt="App de Pagamentos M-Pesa" class="proj-bg-img">
       <div class="project-overlay">
         <div class="project-tag">Web App · 2024</div>
         <div class="project-name">Plataforma de Gestão Empresarial</div>
         <div class="project-desc">Sistema ERP completo com dashboard analítico e gestão de recursos humanos</div>
-        <div class="project-link">Ver Projecto →</div>
+        <a href="#contact" class="project-link">Ver Projecto →</a>
       </div>
       <div class="project-num">01</div>
     </div>
+
+    <!-- Projecto 2 — com imagem real -->
     <div class="portfolio-item reveal reveal-delay-1" data-cat="mobile">
-      <canvas class="project-visual" id="proj2"></canvas>
+      <!-- A tag <img> garante object-fit: cover nativo — cobre tudo sem distorção -->
+      <img src="./img/6.png" alt="App de Pagamentos M-Pesa" class="proj-bg-img">
       <div class="project-overlay">
         <div class="project-tag">Mobile App · 2024</div>
         <div class="project-name">App de Pagamentos M-Pesa</div>
         <div class="project-desc">Integração com serviços de pagamento móvel para e-commerce</div>
-        <div class="project-link">Ver Projecto →</div>
+        <a href="#contact" class="project-link">Ver Projecto →</a>
       </div>
       <div class="project-num">02</div>
     </div>
+
+    <!-- Projecto 3 — com imagem real -->
     <div class="portfolio-item reveal reveal-delay-1" data-cat="design">
-      <canvas class="project-visual" id="proj3"></canvas>
+      <img src="./img/12.png" alt="Sistema de Design Financeiro" class="proj-bg-img">
       <div class="project-overlay">
         <div class="project-tag">UI/UX Design · 2024</div>
         <div class="project-name">Sistema de Design Financeiro</div>
         <div class="project-desc">Design system completo para fintech com 200+ componentes</div>
-        <div class="project-link">Ver Projecto →</div>
+        <a href="#contact" class="project-link">Ver Projecto →</a>
       </div>
       <div class="project-num">03</div>
     </div>
+
+    <!-- Projecto 4 — com imagem real -->
     <div class="portfolio-item reveal reveal-delay-2" data-cat="web">
-      <canvas class="project-visual" id="proj4"></canvas>
+      <img src="./img/roaz imagem.png" alt="Gateway de Integração Bancária" class="proj-bg-img">
       <div class="project-overlay">
         <div class="project-tag">API · 2023</div>
-        <div class="project-name">Gateway de Integração Bancária</div>
+        <div class="project-name">Landing pages para Restaurantes</div>
         <div class="project-desc">API REST de alta performance com 99.9% de uptime</div>
-        <div class="project-link">Ver Projecto →</div>
+        <a href="#contact" class="project-link">Ver Projecto →</a>
       </div>
       <div class="project-num">04</div>
     </div>
+
+    <!-- Projecto 5 — com imagem real -->
     <div class="portfolio-item reveal reveal-delay-2" data-cat="mobile">
-      <canvas class="project-visual" id="proj5"></canvas>
+      <img src="./img/7.png" alt="App de Saúde Digital" class="proj-bg-img">
       <div class="project-overlay">
         <div class="project-tag">Mobile · 2023</div>
         <div class="project-name">App de Saúde Digital</div>
         <div class="project-desc">Telemedicina e gestão de consultas para clínicas</div>
-        <div class="project-link">Ver Projecto →</div>
+        <a href="#contact" class="project-link">Ver Projecto →</a>
       </div>
       <div class="project-num">05</div>
     </div>
-    <div class="portfolio-item featured reveal reveal-delay-3" data-cat="web">
-      <canvas class="project-visual" id="proj6"></canvas>
-      <div class="project-overlay">
-        <div class="project-tag">Web · Design · 2023</div>
-        <div class="project-name">Portal Imobiliário Nacional</div>
-        <div class="project-desc">Plataforma de listagens imobiliárias com mapas interactivos e gestão de propriedades</div>
-        <div class="project-link">Ver Projecto →</div>
-      </div>
-      <div class="project-num">06</div>
-    </div>
+
+
   </div>
 </section>
 
-<!-- ABOUT -->
 <section id="about">
   <div class="about-visual">
     <div class="about-logo-display">
       <div class="about-logo-bg">
-        <svg class="zeza-logo-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- ZE -->
-          <text x="10" y="85" font-family="'Bebas Neue', sans-serif" font-size="90" fill="white" letter-spacing="4">ZE</text>
-          <!-- ZA with person -->
-          <text x="10" y="170" font-family="'Bebas Neue', sans-serif" font-size="90" fill="white" letter-spacing="4">Z</text>
-          <!-- A shape with person inside -->
-          <polygon points="130,80 175,170 85,170" fill="white"/>
-          <polygon points="130,80 175,170 85,170" fill="white"/>
-          <!-- cutout triangle (black) -->
-          <polygon points="130,110 158,170 102,170" fill="#1a1a1a"/>
-          <!-- Person silhouette inside A -->
-          <circle cx="130" cy="118" r="7" fill="#1a1a1a"/>
-          <!-- Lightbulb -->
-          <circle cx="130" cy="100" r="5" fill="white" opacity="0.15"/>
-          <text x="127" y="103" font-size="8" fill="rgba(255,98,0,0.9)">💡</text>
-        </svg>
+        <img src="./4.png" alt="ZEZA TECH" class="about-logo-img" onerror="this.style.background='#FF6200';this.style.opacity='0.3'">
       </div>
       <div class="about-deco"></div>
       <div class="about-deco2"></div>
@@ -1332,8 +1099,8 @@
       Criamos software que<br><em>transforma negócios</em><br>em referências digitais.
     </h2>
     <p class="about-text reveal reveal-delay-2">
-      A ZEZA TECH nasceu com a missão de elevar o padrão tecnológico em Moçambique e além. 
-      Combinamos expertise técnica com visão criativa para entregar soluções que não apenas funcionam — 
+      A ZEZA TECH nasceu com a missão de elevar o padrão tecnológico em Moçambique e além.
+      Combinamos expertise técnica com visão criativa para entregar soluções que não apenas funcionam —
       mas que impressionam, escalam e geram valor real para o seu negócio.
     </p>
     <div class="about-tags reveal reveal-delay-3">
@@ -1348,7 +1115,6 @@
   </div>
 </section>
 
-<!-- PROCESS -->
 <section id="process">
   <div class="section-label reveal" style="color:var(--orange);">Como trabalhamos</div>
   <h2 class="section-title reveal reveal-delay-1" style="color:var(--black);">NOSSO<br>PROCESSO</h2>
@@ -1376,20 +1142,17 @@
   </div>
 </section>
 
-<!-- CONTACT -->
 <section id="contact">
   <canvas id="contact-canvas"></canvas>
   <div class="contact-inner">
     <div>
       <div class="section-label reveal">Fale connosco</div>
-      <h2 class="contact-title reveal reveal-delay-1">
-        VAMOS<br><em>CONSTRUIR</em><br>JUNTOS
-      </h2>
+      <h2 class="contact-title reveal reveal-delay-1">VAMOS<br><em>CONSTRUIR</em><br>JUNTOS</h2>
       <p class="contact-sub reveal reveal-delay-2">
         Tem um projecto em mente? Uma ideia que precisa de ganhar vida digital? Estamos prontos para ouvir e transformar a sua visão em realidade.
       </p>
       <div class="contact-info reveal reveal-delay-3">
-        <div class="contact-item">
+        <a href="tel:+258868532678" class="contact-item">
           <div class="contact-icon">
             <svg viewBox="0 0 20 20" fill="none"><path d="M3 5a2 2 0 012-2h2.28a1 1 0 01.95.68l1.1 3.3a1 1 0 01-.23 1.02L7.91 9.24a11.05 11.05 0 005.85 5.85l1.24-1.24a1 1 0 011.02-.23l3.3 1.1a1 1 0 01.68.95V17a2 2 0 01-2 2A16 16 0 013 3v2z" stroke="#FF6200" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
@@ -1397,8 +1160,8 @@
             <div class="contact-label">Telefone</div>
             <div class="contact-value">+258 868 532 678</div>
           </div>
-        </div>
-        <div class="contact-item">
+        </a>
+        <a href="mailto:geral@zezatech.co.mz" class="contact-item">
           <div class="contact-icon">
             <svg viewBox="0 0 20 20" fill="none"><rect x="2" y="5" width="16" height="12" rx="2" stroke="#FF6200" stroke-width="1.5"/><path d="M2 8l8 5 8-5" stroke="#FF6200" stroke-width="1.5" stroke-linecap="round"/></svg>
           </div>
@@ -1406,8 +1169,8 @@
             <div class="contact-label">Email</div>
             <div class="contact-value">geral@zezatech.co.mz</div>
           </div>
-        </div>
-        <div class="contact-item">
+        </a>
+        <a href="https://instagram.com/reallygreatsite" target="_blank" rel="noopener" class="contact-item">
           <div class="contact-icon">
             <svg viewBox="0 0 20 20" fill="none"><path d="M10 11a2 2 0 100-4 2 2 0 000 4z" stroke="#FF6200" stroke-width="1.5"/><path d="M10 2a8 8 0 00-6 13.2L10 18l6-2.8A8 8 0 0010 2z" stroke="#FF6200" stroke-width="1.5"/></svg>
           </div>
@@ -1415,8 +1178,8 @@
             <div class="contact-label">Social Media</div>
             <div class="contact-value">@reallygreatsite</div>
           </div>
-        </div>
-        <div class="contact-item">
+        </a>
+        <a href="https://www.zezatech.co.mz" target="_blank" rel="noopener" class="contact-item">
           <div class="contact-icon">
             <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#FF6200" stroke-width="1.5"/><path d="M2 10h16M10 2c-2 2.5-3 5-3 8s1 5.5 3 8M10 2c2 2.5 3 5 3 8s-1 5.5-3 8" stroke="#FF6200" stroke-width="1.5" stroke-linecap="round"/></svg>
           </div>
@@ -1424,28 +1187,28 @@
             <div class="contact-label">Website</div>
             <div class="contact-value">www.zezatech.co.mz</div>
           </div>
-        </div>
+        </a>
       </div>
     </div>
     <div>
-      <form class="contact-form reveal reveal-delay-2" onsubmit="handleForm(event)">
+      <form class="contact-form reveal reveal-delay-2" id="contact-form">
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">Nome</label>
-            <input type="text" class="form-input" placeholder="O seu nome" required>
+            <label class="form-label" for="f-nome">Nome</label>
+            <input id="f-nome" type="text" class="form-input" placeholder="O seu nome" required>
           </div>
           <div class="form-group">
-            <label class="form-label">Empresa</label>
-            <input type="text" class="form-input" placeholder="Nome da empresa">
+            <label class="form-label" for="f-empresa">Empresa</label>
+            <input id="f-empresa" type="text" class="form-input" placeholder="Nome da empresa">
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label">Email</label>
-          <input type="email" class="form-input" placeholder="email@empresa.co.mz" required>
+          <label class="form-label" for="f-email">Email</label>
+          <input id="f-email" type="email" class="form-input" placeholder="email@empresa.co.mz" required>
         </div>
         <div class="form-group">
-          <label class="form-label">Serviço de Interesse</label>
-          <select class="form-input" style="cursor:pointer; appearance:none;">
+          <label class="form-label" for="f-servico">Serviço de Interesse</label>
+          <select id="f-servico" class="form-input" style="cursor:pointer; appearance:none;">
             <option value="">Seleccione um serviço...</option>
             <option>Desenvolvimento Web & Mobile</option>
             <option>Software Empresarial</option>
@@ -1455,8 +1218,8 @@
           </select>
         </div>
         <div class="form-group">
-          <label class="form-label">Mensagem</label>
-          <textarea class="form-textarea" placeholder="Descreva o seu projecto..."></textarea>
+          <label class="form-label" for="f-msg">Mensagem</label>
+          <textarea id="f-msg" class="form-textarea" placeholder="Descreva o seu projecto..."></textarea>
         </div>
         <button type="submit" class="btn-primary" style="width:100%; text-align:center;">
           Enviar Mensagem →
@@ -1466,9 +1229,11 @@
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
-  <div class="footer-logo">ZEZA <span>TECH</span></div>
+  <div class="footer-logo">
+    <img src="./4.png" alt="" class="footer-logo-img" onerror="this.style.display='none'">
+    ZEZA <span>TECH</span>
+  </div>
   <div class="footer-copy">
     © 2024 ZEZA TECH · Software Inteligente para Negócio Inteligente<br>
     Maputo, Moçambique
@@ -1480,281 +1245,187 @@
     <a href="#" class="social-link" aria-label="LinkedIn">
       <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
     </a>
-    <a href="#" class="social-link" aria-label="Twitter">
+    <a href="#" class="social-link" aria-label="Twitter/X">
       <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
     </a>
   </div>
 </footer>
 
 <script>
-// CURSOR
+/* ===================== CURSOR ===================== */
 const cursor = document.getElementById('cursor');
 const ring = document.getElementById('cursor-ring');
-let mx=0, my=0, rx=0, ry=0;
+let mx = 0, my = 0, rx = 0, ry = 0;
 document.addEventListener('mousemove', e => {
   mx = e.clientX; my = e.clientY;
   cursor.style.transform = `translate(${mx}px, ${my}px) translate(-50%,-50%)`;
 });
-(function animRing(){
-  rx += (mx-rx)*0.12; ry += (my-ry)*0.12;
+(function animRing() {
+  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
   ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%,-50%)`;
   requestAnimationFrame(animRing);
 })();
 document.querySelectorAll('a,button,.service-card,.portfolio-item,.filter-btn').forEach(el => {
-  el.addEventListener('mouseenter', () => { cursor.style.transform = `translate(${mx}px, ${my}px) translate(-50%,-50%) scale(2.5)`; cursor.style.background = '#FF6200'; cursor.style.mixBlendMode = 'difference'; });
-  el.addEventListener('mouseleave', () => { cursor.style.transform = `translate(${mx}px, ${my}px) translate(-50%,-50%) scale(1)`; cursor.style.background = '#FF6200'; cursor.style.mixBlendMode = 'normal'; });
+  el.addEventListener('mouseenter', () => { cursor.style.transform = `translate(${mx}px, ${my}px) translate(-50%,-50%) scale(2.5)`; });
+  el.addEventListener('mouseleave', () => { cursor.style.transform = `translate(${mx}px, ${my}px) translate(-50%,-50%) scale(1)`; });
 });
 
-// NAV SCROLL
+/* ===================== NAV SCROLL ===================== */
 const navbar = document.getElementById('navbar');
 window.addEventListener('scroll', () => {
-  if(window.scrollY > 60) navbar.classList.add('scrolled');
-  else navbar.classList.remove('scrolled');
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
 });
 
-// WAVE CANVAS - hero
-function drawWave(canvas, alpha) {
+/* ===================== HAMBURGER ===================== */
+const menuBtn = document.getElementById('menu-btn');
+const mobileMenu = document.getElementById('mobile-menu');
+function openMenu() { menuBtn.classList.add('open'); mobileMenu.classList.add('open'); menuBtn.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
+function closeMenu() { menuBtn.classList.remove('open'); mobileMenu.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+menuBtn.addEventListener('click', () => mobileMenu.classList.contains('open') ? closeMenu() : openMenu());
+document.querySelectorAll('.mobile-nav-link').forEach(l => l.addEventListener('click', closeMenu));
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+
+/* ===================== WAVE CANVAS ===================== */
+function drawWave(canvas) {
+  if (!canvas) return;
   const ctx = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
   ctx.clearRect(0,0,W,H);
-  ctx.strokeStyle = `rgba(255,255,255,${alpha||1})`;
+  ctx.strokeStyle = 'rgba(255,255,255,1)';
   ctx.lineWidth = 2.5;
-  const lines = 16;
   const sep = 18;
-  for(let n = -lines; n < lines + Math.ceil(H/sep); n++) {
+  for (let n = -1; n < Math.ceil(H/sep)+1; n++) {
     const baseY = n * sep;
     ctx.beginPath();
-    let firstX = true;
-    for(let x = -50; x <= W+50; x += 4) {
-      const t = x / 90;
-      const wave1 = Math.sin(t * 1.2) * 28;
-      const wave2 = Math.sin(t * 0.7 + 1.5) * 18;
-      const wave3 = Math.cos(t * 2.1 + n*0.3) * 8;
-      const y = baseY + wave1 + wave2 + wave3;
-      if(firstX){ ctx.moveTo(x, y); firstX=false; }
-      else ctx.lineTo(x, y);
+    let first = true;
+    for (let x = -50; x <= W+50; x += 4) {
+      const t = x/90;
+      const y = baseY + Math.sin(t*1.2)*28 + Math.sin(t*0.7+1.5)*18 + Math.cos(t*2.1+n*0.3)*8;
+      first ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+      first = false;
     }
     ctx.stroke();
   }
 }
-
-function resizeCanvas(canvas) {
-  canvas.width = canvas.offsetWidth;
-  canvas.height = canvas.offsetHeight;
-}
-
+function resizeAndDraw(canvas, fn) { if (!canvas) return; canvas.width=canvas.offsetWidth; canvas.height=canvas.offsetHeight; fn(canvas); }
 const heroCanvas = document.getElementById('wave-canvas');
-function initHero() {
-  resizeCanvas(heroCanvas);
-  drawWave(heroCanvas, 1);
-}
-initHero();
-window.addEventListener('resize', initHero);
+const contactCanvas = document.getElementById('contact-canvas');
+function initHero() { resizeAndDraw(heroCanvas, drawWave); }
+function initContact() { resizeAndDraw(contactCanvas, drawWave); }
+initHero(); initContact();
+window.addEventListener('resize', () => { initHero(); initContact(); redrawProjects(); });
 
-// PORTFOLIO canvas backgrounds (project visuals)
-const projColors = [
-  ['#0D1B4B','#0033CC','#FF6200'],
-  ['#1A0A00','#FF6200','#FFAA44'],
-  ['#001A1A','#00665A','#FF6200'],
-  ['#0A0A1A','#1a5cff','#ffffff'],
-  ['#1A0A1A','#660066','#FF6200'],
-  ['#001A0A','#006644','#0033CC'],
-];
-const projPatterns = ['grid','diag','circles','code','mobile','map'];
-
+/* ===================== PROJECT CANVASES (apenas proj1 usa canvas) ===================== */
+const projColors = [['#0D1B4B','#0033CC','#FF6200']];
 function drawProject(id, idx) {
   const canvas = document.getElementById(id);
-  if(!canvas) return;
+  if (!canvas) return;
   canvas.width = canvas.offsetWidth || 600;
   canvas.height = canvas.offsetHeight || 340;
   const ctx = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
-  const [bg, c1, c2] = projColors[idx];
+  const [bg, c1, c2] = projColors[0];
   ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
-  const pat = projPatterns[idx];
-  ctx.strokeStyle = c1; ctx.fillStyle = c1;
-  if(pat === 'grid') {
-    ctx.lineWidth = 0.6; ctx.globalAlpha = 0.25;
-    for(let x=0;x<W;x+=30){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
-    for(let y=0;y<H;y+=30){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
-    ctx.globalAlpha = 1; ctx.fillStyle = c2;
-    ctx.fillRect(W*0.15,H*0.2,W*0.7,H*0.55);
-    ctx.fillStyle = c1; ctx.fillRect(W*0.2,H*0.28,W*0.28,H*0.14);
-    ctx.fillStyle='rgba(255,255,255,0.06)'; ctx.fillRect(W*0.2,H*0.46,W*0.56,H*0.22);
-    // bar chart
-    [0.3,0.5,0.7,0.45,0.6,0.4,0.8].forEach((h,i)=>{
-      ctx.fillStyle = i%2===0 ? c2 : 'rgba(255,255,255,0.15)';
-      const bw=W*0.06; const bx=W*0.22+i*(bw+4); const bh=H*0.15*h;
-      ctx.fillRect(bx, H*0.66-bh, bw, bh);
-    });
-  } else if(pat === 'diag') {
-    ctx.lineWidth=1.5; ctx.globalAlpha=0.2;
-    for(let i=-H;i<W+H;i+=24){ctx.beginPath();ctx.moveTo(i,0);ctx.lineTo(i+H,H);ctx.strokeStyle=c1;ctx.stroke();}
-    ctx.globalAlpha=1;
-    // Phone mockup
-    ctx.strokeStyle='rgba(255,255,255,0.3)'; ctx.lineWidth=2;
-    const pw=W*0.22, ph=W*0.4; const px=(W-pw)/2, py=(H-ph)/2;
-    ctx.beginPath(); ctx.roundRect(px,py,pw,ph,10); ctx.stroke();
-    ctx.fillStyle='rgba(255,255,255,0.05)'; ctx.beginPath(); ctx.roundRect(px,py,pw,ph,10); ctx.fill();
-    [0,1,2,3].forEach(i=>{
-      ctx.fillStyle = i===0?c2:'rgba(255,255,255,0.1)';
-      ctx.fillRect(px+8, py+30+i*24, pw-16, 16);
-    });
-    ctx.fillStyle=c2; ctx.beginPath(); ctx.arc(px+pw/2,py+ph-16,5,0,Math.PI*2); ctx.fill();
-  } else if(pat === 'circles') {
-    [1,0.7,0.4,0.2].forEach((r,i)=>{
-      ctx.strokeStyle = i%2===0?c1:c2; ctx.lineWidth=i===0?1.5:0.8; ctx.globalAlpha=0.3-i*0.05;
-      ctx.beginPath(); ctx.arc(W*0.5,H*0.5,Math.max(W,H)*r*0.5,0,Math.PI*2); ctx.stroke();
-    });
-    ctx.globalAlpha=1;
-    ctx.fillStyle=c2; ctx.beginPath(); ctx.arc(W*0.5,H*0.5,40,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle=c1; ctx.beginPath(); ctx.arc(W*0.5,H*0.5,20,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle='#fff'; ctx.font='bold 12px monospace'; ctx.textAlign='center'; ctx.textBaseline='middle';
-    ctx.fillText('API',W*0.5,H*0.5);
-  } else if(pat === 'code') {
-    ctx.fillStyle='rgba(255,255,255,0.04)'; ctx.fillRect(W*0.1,H*0.1,W*0.8,H*0.8);
-    ctx.font='11px monospace'; ctx.textAlign='left';
-    const lines2=['const zeza = new API({','  endpoint: "/v2/core",','  auth: "bearer",','  cache: true','});','','await zeza.connect();','// ✓ Connected — 12ms','','GET /users → 200 OK','POST /orders → 201 Created'];
-    lines2.forEach((l,i)=>{
-      ctx.fillStyle = l.startsWith('//') ? 'rgba(255,170,0,0.6)' : l.includes('{') || l.includes('}') ? c2 : l.startsWith('GET')||l.startsWith('POST') ? '#4ade80' : 'rgba(255,255,255,0.5)';
-      ctx.fillText(l, W*0.12, H*0.16+i*20);
-    });
-    ctx.fillStyle=c1; ctx.fillRect(W*0.1,H*0.1,4,H*0.8);
-  } else if(pat === 'mobile') {
-    ctx.lineWidth=0.5; ctx.globalAlpha=0.15;
-    for(let x=0;x<W;x+=20){ctx.strokeStyle=c1;ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
-    ctx.globalAlpha=1;
-    [0.6,0.75,0.55,0.8,0.4].forEach((h,i)=>{
-      ctx.fillStyle=i%2===0?c1:c2;
-      const bh=H*0.45*h; const bw=W*0.1;
-      ctx.fillRect(W*0.08+i*(bw+W*0.06),H*0.9-bh,bw,bh);
-    });
-    ctx.strokeStyle=c2; ctx.lineWidth=2; ctx.globalAlpha=0.8;
-    ctx.beginPath();
-    [0,1,2,3,4].forEach((i,idx)=>{
-      const x=W*0.08+idx*(W*0.1+W*0.06)+W*0.05;
-      const y=H*0.9-H*0.45*[0.6,0.75,0.55,0.8,0.4][idx];
-      idx===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
-    });
-    ctx.stroke(); ctx.globalAlpha=1;
-  } else {
-    // map-like
-    ctx.strokeStyle=c1; ctx.lineWidth=1; ctx.globalAlpha=0.2;
-    for(let i=0;i<8;i++){
-      ctx.beginPath(); ctx.moveTo(0,H*i/7); ctx.lineTo(W,H*i/7+Math.random()*20-10); ctx.stroke();
-    }
-    ctx.globalAlpha=1;
-    [
-      [0.3,0.4],[0.5,0.3],[0.7,0.55],[0.4,0.65],[0.6,0.7],[0.2,0.5]
-    ].forEach(([x,y],i)=>{
-      ctx.fillStyle=i===0?c2:c1; ctx.globalAlpha=i===0?1:0.6;
-      ctx.beginPath(); ctx.arc(W*x,H*y,i===0?12:6,0,Math.PI*2); ctx.fill();
-      if(i===0){
-        ctx.strokeStyle='rgba(255,255,255,0.3)'; ctx.lineWidth=1.5;
-        ctx.beginPath(); ctx.arc(W*x,H*y,22,0,Math.PI*2); ctx.stroke();
-      }
-    });
-    ctx.globalAlpha=1;
-  }
-}
-
-['proj1','proj2','proj3','proj4','proj5','proj6'].forEach((id,i) => {
-  const canvas = document.getElementById(id);
-  if(canvas) {
-    const obs = new ResizeObserver(() => drawProject(id, i));
-    obs.observe(canvas);
-    setTimeout(() => drawProject(id, i), 100);
-  }
-});
-
-// CONTACT canvas
-const contactCanvas = document.getElementById('contact-canvas');
-function drawContactBg() {
-  resizeCanvas(contactCanvas);
-  drawWave(contactCanvas, 1);
-}
-drawContactBg();
-window.addEventListener('resize', drawContactBg);
-
-// SCROLL REVEAL
-const revealEls = document.querySelectorAll('.reveal');
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if(entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
+  ctx.strokeStyle = c1; ctx.lineWidth = 0.6; ctx.globalAlpha = 0.25;
+  for (let x=0; x<W; x+=30) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+  for (let y=0; y<H; y+=30) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+  ctx.globalAlpha = 1; ctx.fillStyle = c2;
+  ctx.fillRect(W*0.15, H*0.2, W*0.7, H*0.55);
+  ctx.fillStyle = c1; ctx.fillRect(W*0.2, H*0.28, W*0.28, H*0.14);
+  [0.3,0.5,0.7,0.45,0.6,0.4,0.8].forEach((h,i) => {
+    ctx.fillStyle = i%2===0 ? c2 : 'rgba(255,255,255,0.15)';
+    const bw=W*0.06, bx=W*0.22+i*(bw+4), bh=H*0.15*h;
+    ctx.fillRect(bx, H*0.66-bh, bw, bh);
   });
-}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
-revealEls.forEach(el => observer.observe(el));
+}
+function redrawProjects() { drawProject('proj1', 0); }
+const c1 = document.getElementById('proj1');
+if (c1) { new ResizeObserver(() => drawProject('proj1',0)).observe(c1); setTimeout(() => drawProject('proj1',0), 80); }
 
-// PORTFOLIO FILTER
+/* ===================== SCROLL REVEAL ===================== */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+/* ===================== PORTFOLIO FILTER ===================== */
+// Guarda o estado featured antes de qualquer filtro
+document.querySelectorAll('.portfolio-item.featured').forEach(el => { el.dataset.featured = 'true'; });
+
+function applyFilter(filter) {
+  document.querySelectorAll('.portfolio-item').forEach(item => {
+    const match = filter === 'all' || item.dataset.cat === filter;
+    item.style.display = match ? '' : 'none';
+    if (match) item.classList.toggle('featured', item.dataset.featured === 'true');
+  });
+  setTimeout(redrawProjects, 50);
+}
+
 document.querySelectorAll('.filter-btn').forEach(btn => {
   btn.addEventListener('click', function() {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     this.classList.add('active');
-    const filter = this.dataset.filter;
-    document.querySelectorAll('.portfolio-item').forEach(item => {
-      if(filter === 'all' || item.dataset.cat === filter) {
-        item.style.display = '';
-      } else {
-        item.style.display = 'none';
-      }
-    });
-    ['proj1','proj2','proj3','proj4','proj5','proj6'].forEach((id,i) => drawProject(id,i));
+    applyFilter(this.dataset.filter);
   });
 });
 
-// FORM
-function handleForm(e) {
+// Abre sempre com filtro "web" activo
+applyFilter('web');
+/* ===================== TOUCH: portfolio overlay ===================== */
+document.querySelectorAll('.portfolio-item').forEach(item => {
+  item.addEventListener('click', function() {
+    const active = this.classList.contains('touch-active');
+    document.querySelectorAll('.portfolio-item').forEach(i => i.classList.remove('touch-active'));
+    if (!active) this.classList.add('touch-active');
+  });
+});
+
+/* ===================== CONTACT FORM ===================== */
+document.getElementById('contact-form').addEventListener('submit', function(e) {
   e.preventDefault();
-  const btn = e.target.querySelector('button[type="submit"]');
+  const btn = this.querySelector('button[type="submit"]');
   btn.textContent = 'Mensagem Enviada! ✓';
   btn.style.background = '#00b36b';
-  setTimeout(() => {
-    btn.textContent = 'Enviar Mensagem →';
-    btn.style.background = '';
-    e.target.reset();
-  }, 3000);
-}
-
-// THEME TOGGLE
-const themeBtn = document.getElementById("theme-toggle");
-const toggleLabel = document.getElementById("toggle-label");
-let isLight = false;
-themeBtn.addEventListener("click", () => {
-  isLight = !isLight;
-  document.body.classList.toggle("light-mode", isLight);
-  toggleLabel.textContent = isLight ? "MODO ESCURO" : "MODO CLARO";
-  localStorage.setItem("zeza-theme", isLight ? "light" : "dark");
-  setTimeout(() => { initHero(); drawContactBg(); ["proj1","proj2","proj3","proj4","proj5","proj6"].forEach((id,i)=>drawProject(id,i)); }, 50);
+  setTimeout(() => { btn.textContent = 'Enviar Mensagem →'; btn.style.background = ''; this.reset(); }, 3000);
 });
-if(localStorage.getItem("zeza-theme") === "light") { isLight = true; document.body.classList.add("light-mode"); toggleLabel.textContent = "MODO ESCURO"; }
 
-// COUNTER ANIMATION
+/* ===================== THEME TOGGLE ===================== */
+const themeBtn = document.getElementById('theme-toggle');
+let isLight = localStorage.getItem('zeza-theme') === 'light';
+if (isLight) document.body.classList.add('light-mode');
+themeBtn.addEventListener('click', () => {
+  isLight = !isLight;
+  document.body.classList.toggle('light-mode', isLight);
+  localStorage.setItem('zeza-theme', isLight ? 'light' : 'dark');
+  setTimeout(() => { initHero(); initContact(); redrawProjects(); }, 50);
+});
+
+/* ===================== COUNTER ANIMATION ===================== */
 function animateCounter(el, target, suffix) {
-  let start = 0;
+  let start = null;
   const dur = 1600;
-  const step = (ts) => {
-    if(!start) start = ts;
-    const prog = Math.min((ts-start)/dur, 1);
-    const eased = 1 - Math.pow(1-prog, 3);
-    el.querySelector('.stat-num').innerHTML = Math.floor(eased*target) + '<span>'+suffix+'</span>';
-    if(prog < 1) requestAnimationFrame(step);
-  };
-  requestAnimationFrame(step);
+  const numEl = el.querySelector('.stat-num');
+  (function step(ts) {
+    if (!start) start = ts;
+    const prog = Math.min((ts - start) / dur, 1);
+    const eased = 1 - Math.pow(1 - prog, 3);
+    numEl.innerHTML = Math.floor(eased * target) + '<span>' + suffix + '</span>';
+    if (prog < 1) requestAnimationFrame(step);
+  })(performance.now());
 }
-const statsObs = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if(entry.isIntersecting) {
-      const items = entry.target.querySelectorAll('.stat-item');
-      const data = [[50,'+'],[30,'+'],[5,'+'],[100,'%']];
-      items.forEach((item,i) => animateCounter(item, data[i][0], data[i][1]));
-      statsObs.disconnect();
-    }
-  });
-}, { threshold: 0.3 });
 const statsEl = document.querySelector('.stats-grid');
-if(statsEl) statsObs.observe(statsEl);
+if (statsEl) {
+  const statsObs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const items = entry.target.querySelectorAll('.stat-item');
+        [[50,'+'],[30,'+'],[5,'+'],[100,'%']].forEach((d,i) => { if (items[i]) animateCounter(items[i], d[0], d[1]); });
+        statsObs.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+  statsObs.observe(statsEl);
+}
 </script>
 </body>
 </html>
